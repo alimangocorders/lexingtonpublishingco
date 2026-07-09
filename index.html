@@ -6,9 +6,192 @@
     <title>Lexington Campus</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --sidebar-bg:#fff;--sidebar-border:#e8eaed;--sidebar-hover:#f4f5f7;
+            --sidebar-active-bg:#eef0ff;--sidebar-active-text:#4338ca;--sidebar-text:#5f6368;
+            --accent:#4f46e5;--accent-hover:#4338ca;--accent-light:#eef0ff;
+            --content-bg:#f7f8fa;--card-bg:#fff;--text-primary:#202124;
+            --text-secondary:#5f6368;--text-muted:#9aa0a6;--border:#e8eaed;
+            --border-light:#f1f3f4;--success:#0d9488;--danger:#dc2626;
+            --danger-bg:#fef2f2;--metric-blue:#4f46e5;--metric-teal:#0d9488;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'DM Sans',sans-serif;background:var(--content-bg);color:var(--text-primary);display:flex;min-height:100vh;}
+
+        .sidebar{width:240px;background:var(--sidebar-bg);min-height:100vh;position:fixed;left:0;top:0;bottom:0;z-index:50;display:flex;flex-direction:column;border-right:1px solid var(--sidebar-border);transition:transform .2s ease,opacity .2s ease;}
+        .sidebar.hidden-sidebar{transform:translateX(-100%);opacity:0;pointer-events:none;}
+        .sidebar-brand{padding:20px 18px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:10px;}
+        .brand-icon{width:32px;height:32px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex-shrink:0;}
+        .brand-text h1{font-size:13.5px;font-weight:700;color:var(--text-primary);line-height:1.2;}
+        .brand-text span{font-size:10px;color:var(--text-muted);}
+        .sidebar-nav{flex:1;padding:6px 0;overflow-y:auto;}
+        .nav-label{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);padding:12px 18px 4px;}
+        .nav-item{display:flex;align-items:center;padding:7px 18px;color:var(--sidebar-text);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .12s;text-decoration:none;gap:9px;margin:1px 7px;border-radius:5px;}
+        .nav-item:hover{background:var(--sidebar-hover);color:var(--text-primary);}
+        .nav-item.active{background:var(--sidebar-active-bg);color:var(--sidebar-active-text);font-weight:600;}
+        .nav-item i{width:15px;text-align:center;font-size:11.5px;}
+         .submenu{margin-left:10px;}
+        .nav-item.nav-sub.hidden-sub{display:none;}
+
+        .main{margin-left:240px;flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left .2s ease;}
+        .main.full-width{margin-left:0;}
+        .main-header{background:var(--card-bg);border-bottom:1px solid var(--border);padding:0 24px;height:50px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+        .header-left{display:flex;align-items:center;gap:2px;}
+        .header-right{display:flex;align-items:center;gap:6px;flex-shrink:0;position:relative;}
+        .header-icon{width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:7px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;font-size:14px;transition:all .12s;position:relative;}
+        .header-icon:hover{background:var(--sidebar-hover);color:var(--text-primary);}
+        .header-icon.active-tab{background:var(--accent-light);color:var(--accent);}
+        .header-icon.active-tab:hover{background:var(--accent-light);color:var(--accent-hover);}
+        .header-icon .icon-badge{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--danger);border-radius:50%;border:1.5px solid var(--card-bg);}
+        .header-icon.active-tab .icon-badge{border-color:var(--accent-light);}
+        .header-divider{width:1px;height:24px;background:var(--border);margin:0 10px;}
+        .header-sales{font-size:13px;font-weight:700;color:var(--text-primary);font-variant-numeric:tabular-nums;}
+
+        .profile-trigger{display:flex;align-items:center;gap:8px;padding:4px 8px 4px 4px;border-radius:6px;border:1px solid transparent;cursor:pointer;transition:all .12s;background:transparent;font-family:inherit;}
+        .profile-trigger:hover{background:var(--sidebar-hover);border-color:var(--border-light);}
+        .profile-avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+        .profile-info{text-align:left;}
+        .profile-name{font-size:12px;font-weight:600;color:var(--text-primary);line-height:1.2;}
+        .profile-email{font-size:10.5px;color:var(--text-muted);line-height:1.2;}
+        .profile-chevron{font-size:9px;color:var(--text-muted);margin-left:2px;transition:transform .15s;}
+        .profile-trigger.open .profile-chevron{transform:rotate(180deg);}
+        .profile-dropdown{display:none;position:absolute;top:100%;right:0;margin-top:4px;background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:100;min-width:220px;padding:6px 0;}
+        .profile-dropdown.show{display:block;}
+        .profile-dropdown .pd-header{padding:10px 14px;border-bottom:1px solid var(--border-light);}
+        .profile-dropdown .pd-header .pd-name{font-size:13px;font-weight:600;color:var(--text-primary);}
+        .profile-dropdown .pd-header .pd-email{font-size:11px;color:var(--text-muted);margin-top:1px;}
+        .profile-dropdown button{display:flex;align-items:center;gap:9px;width:100%;padding:8px 14px;border:none;background:transparent;font-size:12.5px;font-family:inherit;color:var(--text-primary);cursor:pointer;text-align:left;transition:background .1s;}
+        .profile-dropdown button:hover{background:#f4f5f7;}
+        .profile-dropdown button i{width:15px;text-align:center;font-size:12px;color:var(--text-muted);}
+        .profile-dropdown .pd-sep{height:1px;background:var(--border-light);margin:4px 0;}
+        .profile-dropdown button.pd-logout{color:var(--danger);}
+        .profile-dropdown button.pd-logout i{color:var(--danger);}
+
+        .main-content{padding:24px 28px;flex:1;}
+        .page{display:none;}.page.active{display:block;}
+
+        /* Page heading */
+        .page-heading{margin-bottom:20px;}
+        .page-heading .ph-breadcrumb{font-size:12.5px;color:var(--text-muted);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+        .page-heading .ph-breadcrumb i{font-size:8px;color:var(--text-muted);}
+        .page-heading .ph-title{font-size:22px;font-weight:800;color:var(--text-primary);line-height:1.2;letter-spacing:-0.3px;}
+
+        .card{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;}
+        .data-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+        .data-table thead th{padding:9px 13px;text-align:left;font-weight:600;font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border);white-space:nowrap;}
+        .data-table thead th.th-actions{text-align:right;}
+        .data-table tbody td{padding:10px 13px;border-bottom:1px solid var(--border-light);vertical-align:middle;}
+        .data-table tbody tr:last-child td{border-bottom:none;}
+        .data-table tbody tr:hover{background:#fafbfc;}
+        .data-table tbody td.td-actions{text-align:right;}
+        .action-btns{display:inline-flex;align-items:center;gap:2px;}
+        .action-btns .btn-icon{border-radius:4px;}
+
+        .dot{width:7px;height:7px;border-radius:50%;display:inline-block;}
+        .dot.on{background:var(--success);}.dot.off{background:var(--danger);}
+
+        .btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;font-size:12px;font-weight:600;border-radius:5px;border:none;cursor:pointer;transition:all .12s;font-family:inherit;white-space:nowrap;}
+        .btn-primary{background:var(--accent);color:#fff;}.btn-primary:hover{background:var(--accent-hover);}
+        .btn-outline{background:#fff;color:var(--text-primary);border:1px solid var(--border);}.btn-outline:hover{background:#f8f9fa;}
+        .btn-ghost-danger{background:transparent;color:var(--danger);border:1px solid transparent;}.btn-ghost-danger:hover{background:var(--danger-bg);}
+        .btn-sm{padding:4px 9px;font-size:11px;}
+        .btn-icon{padding:5px 7px;background:transparent;border:none;color:var(--text-muted);cursor:pointer;border-radius:4px;transition:all .1s;font-size:11px;}
+        .btn-icon:hover{background:#f1f3f4;color:var(--text-primary);}
+
+        .form-label{display:block;font-size:12px;font-weight:600;color:var(--text-primary);margin-bottom:4px;}
+        .form-label .req{color:var(--danger);}
+        .form-input,.form-textarea,.form-select{width:100%;padding:7px 10px;font-size:12.5px;font-family:inherit;border:1px solid var(--border);border-radius:5px;background:#fff;color:var(--text-primary);transition:border-color .12s;outline:none;}
+        .form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(79,70,229,.08);}
+        .form-textarea{resize:vertical;min-height:68px;}
+        .form-check{display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer;}
+        .form-check input{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;}
+
+        .rte{border:1px solid var(--border);border-radius:5px;overflow:hidden;}
+        .rte-bar{background:#fafbfc;border-bottom:1px solid var(--border);padding:4px 5px;display:flex;flex-wrap:wrap;gap:1px;}
+        .rte-bar button{width:26px;height:24px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;border-radius:3px;font-size:10.5px;display:flex;align-items:center;justify-content:center;}
+        .rte-bar button:hover{background:#eef0f2;color:var(--text-primary);}
+        .rte-bar .sep{width:1px;background:#e0e2e6;margin:2px 3px;}
+        .rte-body{padding:9px 10px;min-height:80px;font-size:12.5px;line-height:1.6;outline:none;}
+
+        .search-wrap{position:relative;}
+        .search-wrap i{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:11px;}
+        .search-wrap input{padding-left:30px;}
+        .pager{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-top:1px solid var(--border);font-size:12px;color:var(--text-secondary);}
+        .pager-btns{display:flex;gap:3px;}
+        .pager-btns button{width:28px;height:28px;border:1px solid var(--border);background:#fff;border-radius:4px;cursor:pointer;font-size:12px;color:var(--text-primary);display:flex;align-items:center;justify-content:center;font-family:inherit;}
+        .pager-btns button:hover{border-color:var(--accent);color:var(--accent);}
+        .pager-btns button.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+        .empty{padding:48px 20px;text-align:center;color:var(--text-muted);}
+        .empty i{font-size:28px;margin-bottom:8px;display:block;opacity:.25;}
+        .empty p{font-size:12.5px;}
+
+        .toolbar{display:flex;align-items:center;justify-content:flex-end;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+        .toolbar-2{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+
+        .sec-title{font-size:12.5px;font-weight:700;color:var(--text-primary);margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border-light);}
+        .back{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text-muted);cursor:pointer;text-decoration:none;margin-bottom:14px;transition:color .12s;}
+        .back:hover{color:var(--accent);}
+
+        .mod-list{list-style:none;}
+        .mod-item{padding:0;border-bottom:1px solid var(--border-light);cursor:grab;transition:background .12s;display:flex;align-items:center;user-select:none;}
+        .mod-item:last-child{border-bottom:none;}
+        .mod-item:hover{background:#f8f9fb;}
+        .mod-item.on{background:var(--accent-light);}
+        .mod-item.on .mod-text{color:var(--accent-hover);font-weight:600;}
+        .mod-item.on .mod-num{color:var(--accent);}
+        .mod-item.dragging{opacity:.4;}
+        .mod-item.drag-over{border-top:2px solid var(--accent);}
+        .mod-grip{padding:10px 8px 10px 10px;color:var(--text-muted);font-size:10px;cursor:grab;flex-shrink:0;}
+        .mod-grip:active{cursor:grabbing;}
+        .mod-num{font-weight:700;font-size:11px;min-width:16px;color:var(--text-muted);padding-left:2px;flex-shrink:0;}
+        .mod-text{flex:1;font-size:12.5px;color:var(--text-secondary);padding:10px 6px 10px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .mod-drop{flex-shrink:0;position:relative;}
+        .mod-drop-btn{padding:8px 10px;background:transparent;border:none;color:var(--text-muted);cursor:pointer;border-radius:4px;font-size:11px;transition:all .1s;}
+        .mod-drop-btn:hover{background:#eef0f2;color:var(--text-primary);}
+        .dropdown-menu{display:none;position:absolute;right:0;top:100%;background:#fff;border:1px solid var(--border);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.1);z-index:100;min-width:150px;padding:4px 0;}
+        .dropdown-menu.show{display:block;}
+        .dropdown-menu button{display:flex;align-items:center;gap:8px;width:100%;padding:7px 12px;border:none;background:transparent;font-size:12px;font-family:inherit;color:var(--text-primary);cursor:pointer;text-align:left;transition:background .1s;}
+        .dropdown-menu button:hover{background:#f4f5f7;}
+        .dropdown-menu button i{width:14px;text-align:center;font-size:11px;color:var(--text-muted);}
+        .dropdown-menu button.danger{color:var(--danger);}.dropdown-menu button.danger i{color:var(--danger);}
+        .dropdown-menu .dd-sep{height:1px;background:var(--border-light);margin:3px 0;}
+
+        .metric-card{border-radius:8px;padding:18px;color:#fff;}
+        .mc-label{font-size:11px;font-weight:500;opacity:.85;margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px;}
+        .mc-value{font-size:22px;font-weight:700;line-height:1.1;}
+        .mc-blue{background:var(--metric-blue);}.mc-teal{background:var(--metric-teal);}
+        .fin-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+        .fin-table thead th{padding:8px 12px;text-align:left;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);border-bottom:1px solid var(--border);background:#fafbfc;}
+        .fin-table tbody td{padding:9px 12px;border-bottom:1px solid var(--border-light);}
+        .fin-table tbody tr:last-child td{border-bottom:none;}
+        .fin-table tbody tr:hover{background:#fafbfc;}
+        .fin-amount{font-weight:600;font-variant-numeric:tabular-nums;text-align:right;}
+        .students-dropdown{position:relative;display:inline-block;}
+        .students-dropdown-btn{display:flex;align-items:center;gap:6px;padding:7px 12px;background:#fff;border:1px solid var(--border);border-radius:5px;font-size:12.5px;font-family:inherit;font-weight:500;color:var(--text-primary);cursor:pointer;transition:all .12s;min-width:200px;justify-content:space-between;}
+        .students-dropdown-btn:hover{border-color:#d1d5db;}
+        .students-dropdown-btn i.chevron{font-size:9px;color:var(--text-muted);transition:transform .15s;}
+        .students-dropdown-btn.open i.chevron{transform:rotate(180deg);}
+        .students-dropdown-list{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid var(--border);border-radius:5px;box-shadow:0 4px 12px rgba(0,0,0,.08);z-index:60;margin-top:2px;padding:3px 0;}
+        .students-dropdown-list.show{display:block;}
+        .students-dropdown-list button{display:block;width:100%;padding:7px 12px;border:none;background:transparent;font-size:12.5px;font-family:inherit;color:var(--text-primary);cursor:pointer;text-align:left;transition:background .1s;}
+        .students-dropdown-list button:hover{background:#f4f5f7;}
+        .inline-input{padding:4px 7px;font-size:12px;font-family:inherit;border:1px solid var(--accent);border-radius:4px;outline:none;width:100%;box-shadow:0 0 0 2px rgba(79,70,229,.08);}
+
+
+        .badge{
+            background: #c3c7f8;
+            padding: 2px 6px;
+            width: 50px !important;
+            display: inline-block;
+            border-radius: 12px;
+            text-align: center;
+        }
+ 
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;}}
+    </style>
 </head>
 <body>
 
@@ -17,20 +200,25 @@
         <div class="brand-icon">L</div>
         <div class="brand-text"><h1>Lexington Campus</h1><span>Administration</span></div>
     </div>
-    <nav class="sidebar-nav">
-        <div class="nav-label">Main</div>
-        <a class="nav-item" data-page="users"><i class="fa-solid fa-users"></i> Users</a>
-        <a class="nav-item" data-page="schools"><i class="fa-solid fa-school"></i> Schools</a>
-        <div class="nav-label">Learning</div>
-        <a class="nav-item" data-page="courses"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
-        <a class="nav-item nav-sub" data-page="courses" data-sub="courses"><i class="fa-solid fa-list" style="width:14px;font-size:9.5px;"></i> List of Courses</a>
-        <a class="nav-item nav-sub" data-page="packages" data-sub="packages"><i class="fa-solid fa-box" style="width:14px;font-size:9.5px;"></i> Packages</a>
-        <a class="nav-item nav-sub" data-page="glossary" data-sub="glossary"><i class="fa-solid fa-book" style="width:14px;font-size:9.5px;"></i> Glossary</a>
-        <a class="nav-item nav-sub" data-page="categories" data-sub="categories"><i class="fa-solid fa-tags" style="width:14px;font-size:9.5px;"></i> Categories</a>
-        <a class="nav-item nav-sub" data-page="publish" data-sub="publish"><i class="fa-solid fa-upload" style="width:14px;font-size:9.5px;"></i> Publish</a>
-        <div class="nav-label">Analytics</div>
-        <a class="nav-item" data-page="reports"><i class="fa-solid fa-chart-bar"></i> Reports</a>
-    </nav>
+<nav class="sidebar-nav">
+    <div class="nav-label">Main</div>
+    <a class="nav-item" data-page="users"><i class="fa-solid fa-users"></i> Users</a>
+    <a class="nav-item" data-page="schools"><i class="fa-solid fa-school"></i> Schools</a>
+    
+    <div class="nav-label">Learning</div>
+    <a class="nav-item" data-page="courses"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+    
+    <div class="submenu">
+        <a class="nav-item" data-page="list-courses"><i class="fa-solid fa-list"></i> List of Courses</a>
+        <a class="nav-item" data-page="packages"><i class="fa-solid fa-box"></i> Packages</a>
+        <a class="nav-item" data-page="glossary"><i class="fa-solid fa-book"></i> Glossary</a>
+        <a class="nav-item" data-page="categories"><i class="fa-solid fa-tags"></i> Categories</a>
+        <a class="nav-item" data-page="publish"><i class="fa-solid fa-upload"></i> Publish</a>
+    </div>
+    
+    <div class="nav-label">Analytics</div>
+    <a class="nav-item" data-page="reports"><i class="fa-solid fa-chart-bar"></i> Reports</a>
+</nav>
 </aside>
 
 <div class="main" id="main">
@@ -54,10 +242,7 @@
                 <i class="fa-solid fa-chevron-down profile-chevron"></i>
             </div>
             <div class="profile-dropdown" id="profile-dropdown">
-                <div class="pd-header">
-                    <div class="pd-name">Admin</div>
-                    <div class="pd-email">info@lexingtonpublishingco.com</div>
-                </div>
+                <div class="pd-header"><div class="pd-name">Admin</div><div class="pd-email">info@lexingtonpublishingco.com</div></div>
                 <button><i class="fa-solid fa-user"></i> My Profile</button>
                 <button><i class="fa-solid fa-gear"></i> Account Settings</button>
                 <button><i class="fa-solid fa-shield-halved"></i> Security</button>
@@ -71,24 +256,26 @@
 
         <!-- PAGE: Course List -->
         <div class="page active" id="page-courses">
+            <div class="page-heading">
+                <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> List of Courses</div>
+                <div class="ph-title">List of Courses</div>
+            </div>
             <div class="toolbar">
-                <div class="toolbar-left">
-                    <button class="btn btn-primary" onclick="go('add-course')"><i class="fa-solid fa-plus"></i> Add new course</button>
-                    <button class="btn btn-outline" onclick="go('import')"><i class="fa-solid fa-file-import"></i> Import course</button>
-                </div>
+                <button class="btn btn-outline" onclick="go('import')"><i class="fa-solid fa-file-import"></i> Import course</button>
+                <button class="btn btn-primary" onclick="go('add-course')"><i class="fa-solid fa-plus"></i> Add new course</button>
             </div>
             <div class="card">
                 <table class="data-table">
-                    <thead><tr><th style="width:42px;">Status</th><th style="width:36px;"></th><th>Course Title</th><th>Version</th><th>Schools</th><th>Created on</th><th>Author Name</th><th style="width:36px;"></th></tr></thead>
+                    <thead><tr><th style="width:50px;">Status</th><th>Course Title</th><th>Version</th><th>Schools</th><th>Created on</th><th>Author Name</th><th style="width:80px;" class="th-actions">Actions</th></tr></thead>
                     <tbody>
-                        <tr><td><span class="dot on"></span></td><td><button class="btn-icon" onclick="go('edit-course')"><i class="fa-solid fa-pen"></i></button></td><td style="font-weight:600;">12-6-2019 TREC Test Course</td><td>ver.2</td><td>Train Agents</td><td>June 12, 2020</td><td>John Smith</td><td><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></td></tr>
-                        <tr><td><span class="dot on"></span></td><td><button class="btn-icon"><i class="fa-solid fa-pen"></i></button></td><td style="font-weight:600;">12-6-2019 TREC Test Course</td><td>ver.3</td><td>Train Agents</td><td>June 12, 2020</td><td>John Smith</td><td><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></td></tr>
-                        <tr><td><span class="dot on"></span></td><td><button class="btn-icon" onclick="go('edit-course')"><i class="fa-solid fa-pen"></i></button></td><td style="font-weight:600;">2018-19 CE Legal Update Part I</td><td>ver.1</td><td>Webnet Real Estate School</td><td>May 15, 2019</td><td>Sarah Johnson</td><td><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></td></tr>
-                        <tr><td><span class="dot off"></span></td><td><button class="btn-icon"><i class="fa-solid fa-pen"></i></button></td><td style="font-weight:600;">2018-19 CE Legal Update Part II</td><td>ver.1</td><td>Webnet Real Estate School</td><td>May 15, 2019</td><td>Sarah Johnson</td><td><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></td></tr>
-                        <tr><td><span class="dot on"></span></td><td><button class="btn-icon" onclick="go('edit-course')"><i class="fa-solid fa-pen"></i></button></td><td style="font-weight:600;">Texas Real Estate Principles</td><td>ver.1</td><td>Train Agents</td><td>March 3, 2020</td><td>Michael Davis</td><td><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></td></tr>
-                        <tr><td><span class="dot on"></span></td><td><button class="btn-icon" onclick="go('edit-course')"><i class="fa-solid fa-pen"></i></button></td><td style="font-weight:600;">Real Estate Finance</td><td>ver.2</td><td>Lexington Publishing</td><td>January 20, 2020</td><td>Emily Carter</td><td><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></td></tr>
-                        <tr><td><span class="dot off"></span></td><td><button class="btn-icon" onclick="go('edit-course')"><i class="fa-solid fa-pen"></i></button></td><td style="font-weight:600;">Property Management Essentials</td><td>ver.1</td><td>Webnet Real Estate School</td><td>November 8, 2019</td><td>John Smith</td><td><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></td></tr>
-                        <tr><td><span class="dot on"></span></td><td><button class="btn-icon" onclick="go('edit-course')"><i class="fa-solid fa-pen"></i></button></td><td style="font-weight:600;">Contract Law for Agents</td><td>ver.1</td><td>Train Agents</td><td>August 22, 2019</td><td>Sarah Johnson</td><td><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></td></tr>
+                        <tr><td><span class="dot on"></span></td><td style="font-weight:600;">12-6-2019 TREC Test Course</td><td > <span class="badge">ver.2</span></td><td>Train Agents</td><td>June 12, 2020</td><td>John Smith</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" onclick="go('edit-course')" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                        <tr><td><span class="dot on"></span></td><td style="font-weight:600;">12-6-2019 TREC Test Course</td><td> <span class="badge">ver.3</span></td><td>Train Agents</td><td>June 12, 2020</td><td>John Smith</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                        <tr><td><span class="dot on"></span></td><td style="font-weight:600;">2018-19 CE Legal Update Part I</td><td><span class="badge">ver.1</span></td><td>Webnet Real Estate School</td><td>May 15, 2019</td><td>Sarah Johnson</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" onclick="go('edit-course')" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                        <tr><td><span class="dot off"></span></td><td style="font-weight:600;">2018-19 CE Legal Update Part II</td><td><span class="badge">ver.1</span></td><td>Webnet Real Estate School</td><td>May 15, 2019</td><td>Sarah Johnson</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                        <tr><td><span class="dot on"></span></td><td style="font-weight:600;">Texas Real Estate Principles</td><td><span class="badge">ver.1</span></td><td>Train Agents</td><td>March 3, 2020</td><td>Michael Davis</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" onclick="go('edit-course')" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                        <tr><td><span class="dot on"></span></td><td style="font-weight:600;">Real Estate Finance</td><td><span class="badge">ver.2</span></td><td>Lexington Publishing</td><td>January 20, 2020</td><td>Emily Carter</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" onclick="go('edit-course')" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                        <tr><td><span class="dot off"></span></td><td style="font-weight:600;">Property Management Essentials</td><td><span class="badge">ver.1</span></td><td>Webnet Real Estate School</td><td>November 8, 2019</td><td>John Smith</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" onclick="go('edit-course')" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                        <tr><td><span class="dot on"></span></td><td style="font-weight:600;">Contract Law for Agents</td><td><span class="badge">ver.1</span></td><td>Train Agents</td><td>August 22, 2019</td><td>Sarah Johnson</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" onclick="go('edit-course')" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
                     </tbody>
                 </table>
                 <div class="pager"><span>1 - 8 of 8 items</span><div class="pager-btns"><button class="on">1</button></div></div>
@@ -97,7 +284,10 @@
 
         <!-- PAGE: Add Course -->
         <div class="page" id="page-add-course">
-            <a class="back" onclick="go('courses')"><i class="fa-solid fa-arrow-left"></i> Back to course list</a>
+            <div class="page-heading">
+                <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> Add Course</div>
+                <div class="ph-title">Add Course</div>
+            </div>
             <div class="card" style="padding:22px;">
                 <div class="sec-title">General Information</div>
                 <div style="margin-bottom:18px;"><label class="form-label">Course title <span class="req">*</span></label><input type="text" class="form-input" placeholder="Enter course title"></div>
@@ -107,7 +297,7 @@
             </div>
         </div>
 
-        <!-- PAGE: Edit Course (no sidebar) -->
+        <!-- PAGE: Edit Course -->
         <div class="page" id="page-edit-course">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
                 <button class="btn btn-outline" onclick="go('courses')" style="padding:6px 10px;"><i class="fa-solid fa-arrow-left"></i></button>
@@ -119,10 +309,7 @@
             </div>
             <div style="display:grid;grid-template-columns:280px 1fr;gap:14px;">
                 <div class="card" style="overflow:hidden;">
-                    <div style="padding:9px 12px;background:#fafbfc;border-bottom:1px solid var(--border);font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--text-muted);display:flex;align-items:center;justify-content:space-between;">
-                        <span>Modules</span>
-                        <span style="font-size:10px;font-weight:500;text-transform:none;letter-spacing:0;">Drag to reorder</span>
-                    </div>
+                    <div style="padding:9px 12px;background:#fafbfc;border-bottom:1px solid var(--border);font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);display:flex;align-items:center;justify-content:space-between;"><span>Modules</span><span style="font-size:10px;font-weight:500;text-transform:none;letter-spacing:0;">Drag to reorder</span></div>
                     <ul class="mod-list" id="mod-list">
                         <li class="mod-item on" draggable="true" data-id="1"><span class="mod-grip"><i class="fa-solid fa-grip-vertical"></i></span><span class="mod-num">1</span><span class="mod-text">Promulgated Contract & Addenda</span><span class="mod-drop"><button class="mod-drop-btn" onclick="toggleDrop(this)"><i class="fa-solid fa-ellipsis-vertical"></i></button><div class="dropdown-menu"><button onclick="modAction('edit')"><i class="fa-solid fa-pen"></i> Edit module</button><button onclick="modAction('duplicate')"><i class="fa-solid fa-copy"></i> Duplicate</button><div class="dd-sep"></div><button onclick="modAction('up')"><i class="fa-solid fa-arrow-up"></i> Move up</button><button onclick="modAction('down')"><i class="fa-solid fa-arrow-down"></i> Move down</button><div class="dd-sep"></div><button class="danger" onclick="modAction('delete')"><i class="fa-solid fa-trash"></i> Delete module</button></div></span></li>
                         <li class="mod-item" draggable="true" data-id="2"><span class="mod-grip"><i class="fa-solid fa-grip-vertical"></i></span><span class="mod-num">2</span><span class="mod-text">Agency Relationships</span><span class="mod-drop"><button class="mod-drop-btn" onclick="toggleDrop(this)"><i class="fa-solid fa-ellipsis-vertical"></i></button><div class="dropdown-menu"><button onclick="modAction('edit')"><i class="fa-solid fa-pen"></i> Edit module</button><button onclick="modAction('duplicate')"><i class="fa-solid fa-copy"></i> Duplicate</button><div class="dd-sep"></div><button onclick="modAction('up')"><i class="fa-solid fa-arrow-up"></i> Move up</button><button onclick="modAction('down')"><i class="fa-solid fa-arrow-down"></i> Move down</button><div class="dd-sep"></div><button class="danger" onclick="modAction('delete')"><i class="fa-solid fa-trash"></i> Delete module</button></div></span></li>
@@ -150,27 +337,35 @@
 
         <!-- PAGE: Import -->
         <div class="page" id="page-import">
+            <div class="page-heading">
+                <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> List of Imports</div>
+                <div class="ph-title">List of Imports</div>
+            </div>
             <div class="toolbar">
-                <div class="toolbar-left"><button class="btn btn-primary"><i class="fa-solid fa-upload"></i> Upload file to Import</button></div>
-                <div class="toolbar-right"><div class="search-wrap"><i class="fa-solid fa-search"></i><input type="text" class="form-input" placeholder="Search by course name" style="width:230px;"></div></div>
+                <div class="search-wrap"><i class="fa-solid fa-search"></i><input type="text" class="form-input" placeholder="Search by course name" style="width:230px;"></div>
+                <button class="btn btn-primary"><i class="fa-solid fa-upload"></i> Upload file to Import</button>
             </div>
             <div class="card">
-                <table class="data-table"><thead><tr><th>Files</th><th>Current course title</th><th>Original Course ID</th><th>Imported on</th><th>Author Name</th><th style="width:36px;"></th></tr></thead><tbody><tr><td colspan="6"><div class="empty"><i class="fa-solid fa-inbox"></i><p>No items to display</p></div></td></tr></tbody></table>
+                <table class="data-table"><thead><tr><th>Files</th><th>Current course title</th><th>Original Course ID</th><th>Imported on</th><th>Author Name</th><th style="width:80px;" class="th-actions">Actions</th></tr></thead><tbody><tr><td colspan="6"><div class="empty"><i class="fa-solid fa-inbox"></i><p>No items to display</p></div></td></tr></tbody></table>
             </div>
         </div>
 
         <!-- PAGE: Packages -->
         <div class="page" id="page-packages">
-            <div class="toolbar">
-                <div class="toolbar-left">
-                    <button class="btn btn-primary" onclick="go('add-package')"><i class="fa-solid fa-plus"></i> New package</button>
-                    <button class="btn btn-ghost-danger"><i class="fa-solid fa-trash"></i> Delete selected</button>
-                </div>
-                <div class="toolbar-right"><div class="search-wrap"><i class="fa-solid fa-search"></i><input type="text" class="form-input" placeholder="Search by package name" style="width:230px;"></div></div>
+            <div class="page-heading">
+                <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> Packages</div>
+                <div class="ph-title">Packages</div>
+            </div>
+            <div class="toolbar-2">
+                <div class="search-wrap"><i class="fa-solid fa-search"></i><input type="text" class="form-input" placeholder="Search by package name" style="width:230px;"></div>
+              <div>
+                <button class="btn btn-ghost-danger"><i class="fa-solid fa-trash"></i> Delete selected</button>
+                <button class="btn btn-primary" onclick="go('add-package')"><i class="fa-solid fa-plus"></i> New package</button>
+            </div>
             </div>
             <div class="card">
                 <table class="data-table">
-                    <thead><tr><th style="width:42px;">Status</th><th style="width:32px;"><input type="checkbox" style="accent-color:var(--accent);cursor:pointer;"></th><th>Package name</th><th>Schools</th><th>Creation Date</th><th>This month's sales</th></tr></thead>
+                    <thead><tr><th style="width:50px;">Status</th><th style="width:36px;"><input type="checkbox" style="accent-color:var(--accent);cursor:pointer;"></th><th>Package name</th><th>Schools</th><th>Creation Date</th><th>This month's sales</th></tr></thead>
                     <tbody>
                         <tr><td><span class="dot on"></span></td><td><input type="checkbox" style="accent-color:var(--accent);cursor:pointer;"></td><td style="font-weight:600;">Texas CE Package #11 18 Hours</td><td>Train Agents</td><td>June 12, 2020</td><td>$0.00</td></tr>
                         <tr><td><span class="dot on"></span></td><td><input type="checkbox" style="accent-color:var(--accent);cursor:pointer;"></td><td style="font-weight:600;">Texas CE Package #12 18 Hours</td><td>Webnet Real Estate School</td><td>June 10, 2020</td><td>$0.00</td></tr>
@@ -186,7 +381,10 @@
 
         <!-- PAGE: Add Package -->
         <div class="page" id="page-add-package">
-            <a class="back" onclick="go('packages')"><i class="fa-solid fa-arrow-left"></i> Back to package list</a>
+            <div class="page-heading">
+                <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> Add New Package</div>
+                <div class="ph-title">Add New Package</div>
+            </div>
             <div class="card" style="padding:22px;margin-bottom:14px;">
                 <div class="sec-title">General</div>
                 <div style="margin-bottom:16px;"><label class="form-label">Package name <span class="req">*</span></label><input type="text" class="form-input" placeholder="Enter package name"></div>
@@ -211,25 +409,32 @@
 
         <!-- PAGE: Glossary -->
         <div class="page" id="page-glossary">
-            <div class="toolbar"><div class="toolbar-left"><button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add new record</button></div></div>
+            <div class="page-heading">
+                <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> Glossary List</div>
+                <div class="ph-title">Glossary List</div>
+            </div>
+            <div class="toolbar"><button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add new record</button></div>
             <div class="card">
-                <table class="data-table"><thead><tr><th>Glossary</th><th>Description</th><th>Active</th><th style="width:150px;"></th></tr></thead><tbody><tr><td style="font-weight:600;">Magic Glossary</td><td>Glossary Description</td><td><span style="color:var(--success);font-weight:600;font-size:12px;">true</span></td><td><div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit glossary</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr></tbody></table>
+                <table class="data-table"><thead><tr><th>Glossary</th><th>Description</th><th>Active</th><th style="width:150px;" class="th-actions">Actions</th></tr></thead><tbody><tr><td style="font-weight:600;">Magic Glossary</td><td>Glossary Description</td><td><span style="color:var(--success);font-weight:600;font-size:12px;">true</span></td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit glossary</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr></tbody></table>
                 <div class="pager"><span>1 - 1 of 1 items</span><div class="pager-btns"><button class="on">1</button></div></div>
             </div>
         </div>
 
         <!-- PAGE: Categories -->
         <div class="page" id="page-categories">
-            <div class="toolbar"><div class="toolbar-left"><h3 style="font-size:13.5px;font-weight:700;">Manage categories</h3></div></div>
+            <div class="page-heading">
+                <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> Manage Categories</div>
+                <div class="ph-title">Manage Categories</div>
+            </div>
             <div class="card">
                 <table class="data-table" id="cat-table">
-                    <thead><tr><th>Name</th><th>Description</th><th style="width:120px;"></th></tr></thead>
+                    <thead><tr><th>Name</th><th>Description</th><th style="width:120px;" class="th-actions">Actions</th></tr></thead>
                     <tbody>
-                        <tr><td class="cn">Washington Pre-license</td><td class="cd">Pre-licensing courses for Washington state real estate agents</td><td><div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
-                        <tr><td class="cn">Managing Broker</td><td class="cd">Courses required for managing broker designation and responsibilities</td><td><div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
-                        <tr><td class="cn">Texas CE</td><td class="cd">Continuing education courses for Texas real estate license renewal</td><td><div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
-                        <tr><td class="cn">Texas SAE</td><td class="cd">Sales agent apprenticeship education courses for new Texas agents</td><td><div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
-                        <tr><td class="cn">National Courses</td><td class="cd">General real estate courses applicable across multiple states</td><td><div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
+                        <tr><td class="cn">Washington Pre-license</td><td class="cd">Pre-licensing courses for Washington state real estate agents</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
+                        <tr><td class="cn">Managing Broker</td><td class="cd">Courses required for managing broker designation and responsibilities</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
+                        <tr><td class="cn">Texas CE</td><td class="cd">Continuing education courses for Texas real estate license renewal</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
+                        <tr><td class="cn">Texas SAE</td><td class="cd">Sales agent apprenticeship education courses for new Texas agents</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
+                        <tr><td class="cn">National Courses</td><td class="cd">General real estate courses applicable across multiple states</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -237,10 +442,13 @@
 
         <!-- PAGE: Publish -->
         <div class="page" id="page-publish">
-            <div class="toolbar"><div class="toolbar-left"><h3 style="font-size:13.5px;font-weight:700;">Publish - Courses</h3></div></div>
+            <div class="page-heading">
+                <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> Publish - Courses</div>
+                <div class="ph-title">Publish - Courses</div>
+            </div>
             <div class="card">
                 <table class="data-table">
-                    <thead><tr><th style="width:100px;">Status</th><th>Course Name</th></tr></thead>
+                    <thead><tr><th style="width:110px;">Status</th><th>Course Name</th></tr></thead>
                     <tbody>
                         <tr><td><span class="dot on"></span> Published</td><td style="font-weight:600;">12-6-2019 TREC Test Course ver.2</td></tr>
                         <tr><td><span class="dot on"></span> Published</td><td style="font-weight:600;">12-6-2019 TREC Test Course ver.3</td></tr>
@@ -260,18 +468,14 @@
 
         <!-- PAGE: Reports -->
         <div class="page" id="page-reports">
+            <div class="page-heading">
+                <div class="ph-breadcrumb">Analytics <i class="fa-solid fa-chevron-right"></i> Reports</div>
+                <div class="ph-title">Reports</div>
+            </div>
             <div class="toolbar">
-                <div class="toolbar-left">
-                    <div class="students-dropdown" id="students-dd">
-                        <button class="students-dropdown-btn" onclick="toggleStudentsDd()">
-                            <span>Students</span>
-                            <i class="fa-solid fa-chevron-down chevron"></i>
-                        </button>
-                        <div class="students-dropdown-list" id="students-dd-list">
-                            <button onclick="selectStudentOption(this)">Student Registrations</button>
-                            <button onclick="selectStudentOption(this)">Affiliates</button>
-                        </div>
-                    </div>
+                <div class="students-dropdown" id="students-dd">
+                    <button class="students-dropdown-btn" onclick="toggleStudentsDd()"><span>Students</span><i class="fa-solid fa-chevron-down chevron"></i></button>
+                    <div class="students-dropdown-list" id="students-dd-list"><button onclick="selectStudentOption(this)">Student Registrations</button><button onclick="selectStudentOption(this)">Affiliates</button></div>
                 </div>
             </div>
             <div style="display:grid;grid-template-columns:260px 1fr;gap:14px;">
@@ -280,19 +484,8 @@
                     <div class="metric-card mc-teal"><div class="mc-label">Total students</div><div class="mc-value">26,901</div></div>
                 </div>
                 <div class="card" style="overflow:hidden;">
-                    <div style="padding:10px 14px;background:#fafbfc;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--text-muted);">Financial Summary by School</div>
-                    <table class="fin-table">
-                        <thead><tr><th>School</th><th style="text-align:right;">Amount</th></tr></thead>
-                        <tbody>
-                            <tr><td>Train Agents</td><td class="fin-amount">$9,158.88</td></tr>
-                            <tr><td>A Plus Estate School</td><td class="fin-amount">$0,902.34</td></tr>
-                            <tr><td>Webnet Real Estate School</td><td class="fin-amount">$3,421.50</td></tr>
-                            <tr><td>Lexington Publishing</td><td class="fin-amount">$1,876.22</td></tr>
-                            <tr><td>Texas Real Estate Academy</td><td class="fin-amount">$652.10</td></tr>
-                            <tr><td>Premier School of Real Estate</td><td class="fin-amount">$445.00</td></tr>
-                            <tr><td>Capital Real Estate Training</td><td class="fin-amount">$312.75</td></tr>
-                        </tbody>
-                    </table>
+                    <div style="padding:10px 14px;background:#fafbfc;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);">Financial Summary by School</div>
+                    <table class="fin-table"><thead><tr><th>School</th><th style="text-align:right;">Amount</th></tr></thead><tbody><tr><td>Train Agents</td><td class="fin-amount">$9,158.88</td></tr><tr><td>A Plus Estate School</td><td class="fin-amount">$0,902.34</td></tr><tr><td>Webnet Real Estate School</td><td class="fin-amount">$3,421.50</td></tr><tr><td>Lexington Publishing</td><td class="fin-amount">$1,876.22</td></tr><tr><td>Texas Real Estate Academy</td><td class="fin-amount">$652.10</td></tr><tr><td>Premier School of Real Estate</td><td class="fin-amount">$445.00</td></tr><tr><td>Capital Real Estate Training</td><td class="fin-amount">$312.75</td></tr></tbody></table>
                     <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:12.5px;"><span style="font-weight:600;">Total</span><span style="font-weight:700;color:var(--accent);">$16,768.79</span></div>
                 </div>
             </div>
@@ -303,6 +496,7 @@
 
 <script>
     var titles = {
+    'list-courses':['Courses','List of Courses'],
     'courses':['Courses','List of Courses'],
     'add-course':['Courses','Add Course'],
     'edit-course':['Courses','Edit Course'],
@@ -316,24 +510,25 @@
     'schools':['Main','Schools']
 };
 
-var subPages = ['courses', 'packages', 'glossary', 'categories', 'publish'];
+var subPages = ['list-courses', 'packages', 'glossary', 'categories', 'publish'];
 
 function go(id) {
-    // 1. Manage Page Visibility
+    // 1. Resolve target IDs: Clicking parent "courses" loads "list-courses"
+    var targetId = (id === 'courses') ? 'list-courses' : id;
+    var pageId = (targetId === 'list-courses') ? 'courses' : targetId;
+
+    // 2. Manage Page Visibility
     document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
-    
-    // Default to the main course list if 'courses' parent is triggered
-    var targetId = id; 
-    var t = document.getElementById('page-' + targetId);
+    var t = document.getElementById('page-' + pageId);
     if(t) t.classList.add('active');
 
-    // 2. Manage Breadcrumbs
+    // 3. Manage Breadcrumbs
     var bc = document.getElementById('breadcrumb'), info = titles[targetId] || ['', targetId];
     if(bc){
         bc.innerHTML='<span>'+info[0]+'</span> <i class="fa-solid fa-chevron-right"></i> <span class="current">'+info[1]+'</span>';
     }
 
-    // 3. Sidebar Visibility Logic
+    // 4. Sidebar Visibility Logic
     var sidebar = document.getElementById('sidebar');
     var mainEl = document.getElementById('main');
     if(targetId === 'edit-course') {
@@ -344,17 +539,17 @@ function go(id) {
         mainEl.classList.remove('full-width');
     }
 
-    // 4. Sidebar Highlight Logic
+    // 5. Sidebar Highlight Logic
     document.querySelectorAll('.nav-item').forEach(function(n){
         n.classList.remove('active');
     });
 
-    // Highlight the active item
+    // Highlight the selected item
     var activeEl = document.querySelector('.nav-item[data-page="'+targetId+'"]');
     if(activeEl) activeEl.classList.add('active');
 
-    // If it's a submenu item, ensure the parent 'Courses' also stays active
-    if (subPages.includes(targetId) && targetId !== 'courses') {
+    // Keep parent "Courses" active when sub-item is selected
+    if (subPages.includes(targetId)) {
         var parentEl = document.querySelector('.nav-item[data-page="courses"]');
         if(parentEl) parentEl.classList.add('active');
     }
@@ -365,16 +560,11 @@ document.querySelectorAll('.nav-item').forEach(function(n){
     n.addEventListener('click',function(e){
         e.preventDefault();
         var p = this.getAttribute('data-page');
-        // If the main "Courses" parent link is clicked, force show the "courses" page
-        if(p === 'courses') {
-            go('courses');
-        } else if(p) {
-            go(p);
-        }
+        if(p) go(p);
     });
 });
 
-/* --- Helper Functions --- */
+/* --- Utility Functions --- */
 function rte(cmd){document.execCommand(cmd,false,null);}
 
 function toggleDrop(btn){var m=btn.nextElementSibling,o=m.classList.contains('show');closeAllDrops();if(!o)m.classList.add('show');}
@@ -422,7 +612,7 @@ function saveCat(btn){var r=btn.closest('tr'),ni=r.querySelector('.cn input'),di
 function cancelCat(btn,on,od){var r=btn.closest('tr'),a=btn.closest('td');r.querySelector('.cn').textContent=on;r.querySelector('.cd').textContent=od;a.innerHTML='<div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div>';}
 
 /* Init */
-go('courses');
+go('list-courses');
 </script>
 </body>
 </html>
