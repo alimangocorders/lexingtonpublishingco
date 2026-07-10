@@ -9,188 +9,279 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        :root {
-            --sidebar-bg:#fff;--sidebar-border:#e8eaed;--sidebar-hover:#f4f5f7;
-            --sidebar-active-bg:#eef0ff;--sidebar-active-text:#4338ca;--sidebar-text:#5f6368;
-            --accent:#4f46e5;--accent-hover:#4338ca;--accent-light:#eef0ff;
-            --content-bg:#f7f8fa;--card-bg:#fff;--text-primary:#202124;
-            --text-secondary:#5f6368;--text-muted:#9aa0a6;--border:#e8eaed;
-            --border-light:#f1f3f4;--success:#0d9488;--danger:#dc2626;
-            --danger-bg:#fef2f2;--metric-blue:#4f46e5;--metric-teal:#0d9488;
+        :root{
+            --sidebar-bg:#161b2e;--sidebar-hover:#1e2440;--sidebar-active:#252c4a;
+            --sidebar-active-text:#a9c9f7;--sidebar-text:#7c849b;
+            --accent:#4078E5;--accent-hover:#3162c4;--accent-light:#eaf1fd;
+            --content-bg:#f0f1f5;--card-bg:#ffffff;--text-primary:#1a1d2e;
+            --text-secondary:#64748b;--text-muted:#94a3b8;--border:#e2e5f0;
+            --border-light:#f1f5f9;--success:#10b981;--danger:#ef4444;
+            --danger-bg:#fef2f2;--metric-indigo:#4078E5;--metric-emerald:#0d9488;
         }
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'DM Sans',sans-serif;background:var(--content-bg);color:var(--text-primary);display:flex;min-height:100vh;}
-
-        .sidebar{width:240px;background:var(--sidebar-bg);min-height:100vh;position:fixed;left:0;top:0;bottom:0;z-index:50;display:flex;flex-direction:column;border-right:1px solid var(--sidebar-border);transition:transform .2s ease,opacity .2s ease;}
+        .sidebar{width:248px;background:var(--sidebar-bg);min-height:100vh;position:fixed;left:0;top:0;bottom:0;z-index:50;display:flex;flex-direction:column;transition:transform .25s cubic-bezier(.4,0,.2,1),opacity .25s ease;box-shadow:2px 0 8px rgba(0,0,0,.12);}
         .sidebar.hidden-sidebar{transform:translateX(-100%);opacity:0;pointer-events:none;}
-        .sidebar-brand{padding:20px 18px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:10px;}
-        .brand-icon{width:32px;height:32px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex-shrink:0;}
-        .brand-text h1{font-size:13.5px;font-weight:700;color:var(--text-primary);line-height:1.2;}
-        .brand-text span{font-size:10px;color:var(--text-muted);}
-        .sidebar-nav{flex:1;padding:6px 0;overflow-y:auto;}
-        .nav-label{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);padding:12px 18px 4px;}
-        .nav-item{display:flex;align-items:center;padding:7px 18px;color:var(--sidebar-text);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .12s;text-decoration:none;gap:9px;margin:1px 7px;border-radius:5px;}
-        .nav-item:hover{background:var(--sidebar-hover);color:var(--text-primary);}
-        .nav-item.active{background:var(--sidebar-active-bg);color:var(--sidebar-active-text);font-weight:600;}
-        .nav-item i{width:15px;text-align:center;font-size:11.5px;}
-         .submenu{margin-left:10px;}
+        .sidebar-brand{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:11px;}
+        .brand-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),#6b9af0);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;flex-shrink:0;box-shadow:0 2px 8px rgba(64,120,229,.3);}
+        .brand-text h1{font-size:14px;font-weight:700;color:#e2e8f0;line-height:1.2;}
+        .brand-text span{font-size:10px;color:var(--sidebar-text);letter-spacing:.3px;}
+        .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto;}
+        .nav-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:rgba(124,132,155,.5);padding:14px 20px 5px;}
+        .nav-item{display:flex;align-items:center;padding:8px 14px ;color:var(--sidebar-text);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none;gap:10px;margin:1px 8px;border-radius:6px;border-left:2px solid transparent;}
+        .nav-item:hover{background:var(--sidebar-hover);color:#c8d0e0;}
+        .nav-item.active{background:var(--sidebar-active);color:var(--sidebar-active-text);font-weight:600;border-left-color:var(--accent);box-shadow:inset 3px 0 8px -4px rgba(64,120,229,.15);}
+        .nav-item i{width:16px;text-align:center;font-size:12px;opacity:.7;}
+        .nav-item.active i{opacity:1;}
+        .nav-sub{padding-left:10px;}
         .nav-item.nav-sub.hidden-sub{display:none;}
 
-        .main{margin-left:240px;flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left .2s ease;}
+        .main{margin-left:248px;flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left .25s cubic-bezier(.4,0,.2,1);}
         .main.full-width{margin-left:0;}
-        .main-header{background:var(--card-bg);border-bottom:1px solid var(--border);padding:0 24px;height:50px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-        .header-left{display:flex;align-items:center;gap:2px;}
-        .header-right{display:flex;align-items:center;gap:6px;flex-shrink:0;position:relative;}
-        .header-icon{width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:7px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;font-size:14px;transition:all .12s;position:relative;}
-        .header-icon:hover{background:var(--sidebar-hover);color:var(--text-primary);}
-        .header-icon.active-tab{background:var(--accent-light);color:var(--accent);}
+        .main-header{background:var(--card-bg);border-bottom:1px solid var(--border);padding:0 28px;height:54px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+        .header-left{display:flex;align-items:center;gap:3px;}
+        .header-right{display:flex;align-items:center;gap:8px;flex-shrink:0;position:relative;}
+        .header-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;font-size:13px;transition:all .15s;position:relative;}
+        .header-icon:hover{background:var(--border-light);color:var(--text-primary);}
+        .header-icon.active-tab{background:var(--accent-light);color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
         .header-icon.active-tab:hover{background:var(--accent-light);color:var(--accent-hover);}
-        .header-icon .icon-badge{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--danger);border-radius:50%;border:1.5px solid var(--card-bg);}
+        .header-icon .icon-badge{position:absolute;top:5px;right:5px;width:6px;height:6px;background:var(--danger);border-radius:50%;border:1.5px solid var(--card-bg);}
         .header-icon.active-tab .icon-badge{border-color:var(--accent-light);}
-        .header-divider{width:1px;height:24px;background:var(--border);margin:0 10px;}
+        .header-divider{width:1px;height:22px;background:var(--border);margin:0 10px;}
         .header-sales{font-size:13px;font-weight:700;color:var(--text-primary);font-variant-numeric:tabular-nums;}
 
-        .profile-trigger{display:flex;align-items:center;gap:8px;padding:4px 8px 4px 4px;border-radius:6px;border:1px solid transparent;cursor:pointer;transition:all .12s;background:transparent;font-family:inherit;}
-        .profile-trigger:hover{background:var(--sidebar-hover);border-color:var(--border-light);}
-        .profile-avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+        .profile-trigger{display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:8px;border:1px solid transparent;cursor:pointer;transition:all .15s;background:transparent;font-family:inherit;}
+        .profile-trigger:hover{background:var(--border-light);border-color:var(--border);}
+        .profile-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#6b9af0);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
         .profile-info{text-align:left;}
         .profile-name{font-size:12px;font-weight:600;color:var(--text-primary);line-height:1.2;}
-        .profile-email{font-size:10.5px;color:var(--text-muted);line-height:1.2;}
-        .profile-chevron{font-size:9px;color:var(--text-muted);margin-left:2px;transition:transform .15s;}
+        .profile-email{font-size:10px;color:var(--text-muted);line-height:1.2;}
+        .profile-chevron{font-size:8px;color:var(--text-muted);margin-left:2px;transition:transform .15s;}
         .profile-trigger.open .profile-chevron{transform:rotate(180deg);}
-        .profile-dropdown{display:none;position:absolute;top:100%;right:0;margin-top:4px;background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:100;min-width:220px;padding:6px 0;}
+        .profile-dropdown{display:none;position:absolute;top:100%;right:0;margin-top:6px;background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:100;min-width:220px;padding:6px 0;}
         .profile-dropdown.show{display:block;}
-        .profile-dropdown .pd-header{padding:10px 14px;border-bottom:1px solid var(--border-light);}
+        .profile-dropdown .pd-header{padding:12px 16px;border-bottom:1px solid var(--border-light);}
         .profile-dropdown .pd-header .pd-name{font-size:13px;font-weight:600;color:var(--text-primary);}
-        .profile-dropdown .pd-header .pd-email{font-size:11px;color:var(--text-muted);margin-top:1px;}
-        .profile-dropdown button{display:flex;align-items:center;gap:9px;width:100%;padding:8px 14px;border:none;background:transparent;font-size:12.5px;font-family:inherit;color:var(--text-primary);cursor:pointer;text-align:left;transition:background .1s;}
-        .profile-dropdown button:hover{background:#f4f5f7;}
+        .profile-dropdown .pd-header .pd-email{font-size:11px;color:var(--text-muted);margin-top:2px;}
+        .profile-dropdown button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 16px;border:none;background:transparent;font-size:12.5px;font-family:inherit;color:var(--text-primary);cursor:pointer;text-align:left;transition:background .1s;}
+        .profile-dropdown button:hover{background:#f8fafc;}
         .profile-dropdown button i{width:15px;text-align:center;font-size:12px;color:var(--text-muted);}
         .profile-dropdown .pd-sep{height:1px;background:var(--border-light);margin:4px 0;}
-        .profile-dropdown button.pd-logout{color:var(--danger);}
-        .profile-dropdown button.pd-logout i{color:var(--danger);}
+        .profile-dropdown button.pd-logout{color:var(--danger);}.profile-dropdown button.pd-logout i{color:var(--danger);}
 
-        .main-content{padding:24px 28px;flex:1;}
+        .main-content{padding:28px 32px;flex:1;}
         .page{display:none;}.page.active{display:block;}
 
-        /* Page heading */
-        .page-heading{margin-bottom:20px;}
-        .page-heading .ph-breadcrumb{font-size:12.5px;color:var(--text-muted);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+        .page-heading{margin-bottom:24px;padding-left:16px;position:relative;}
+        .page-heading::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--accent);border-radius:2px;}
+        .page-heading .ph-breadcrumb{font-size:12px;color:var(--text-muted);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
         .page-heading .ph-breadcrumb i{font-size:8px;color:var(--text-muted);}
-        .page-heading .ph-title{font-size:22px;font-weight:800;color:var(--text-primary);line-height:1.2;letter-spacing:-0.3px;}
+        .page-heading .ph-title{font-size:22px;font-weight:800;color:var(--text-primary);line-height:1.2;letter-spacing:-.4px;}
 
-        .card{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;}
+        .card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden;transition:box-shadow .15s;}
+        @media(max-width:900px){
+            #page-reports > div[style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:1fr 1fr;}
+        }
         .data-table{width:100%;border-collapse:collapse;font-size:12.5px;}
-        .data-table thead th{padding:9px 13px;text-align:left;font-weight:600;font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border);white-space:nowrap;}
+        .data-table thead{background:linear-gradient(to bottom,#fafbfd,#f5f7fa);}
+        .data-table thead th{padding:10px 14px;text-align:left;font-weight:600;font-size:10.5px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);white-space:nowrap;}
         .data-table thead th.th-actions{text-align:right;}
-        .data-table tbody td{padding:10px 13px;border-bottom:1px solid var(--border-light);vertical-align:middle;}
+        .data-table tbody td{padding:12px 14px;border-bottom:1px solid var(--border-light);vertical-align:middle;}
         .data-table tbody tr:last-child td{border-bottom:none;}
-        .data-table tbody tr:hover{background:#fafbfc;}
+        .data-table tbody tr{transition:background .12s;}
+        .data-table tbody tr:hover{background:linear-gradient(90deg,#f8f8ff 0%,#fafaff 50%,transparent 100%);}
         .data-table tbody td.td-actions{text-align:right;}
-        .action-btns{display:inline-flex;align-items:center;gap:2px;}
-        .action-btns .btn-icon{border-radius:4px;}
 
-        .dot{width:7px;height:7px;border-radius:50%;display:inline-block;}
-        .dot.on{background:var(--success);}.dot.off{background:var(--danger);}
+        .dot{width:8px;height:8px;border-radius:50%;display:inline-block;position:relative;}
+        .dot.on{background:var(--success);box-shadow:0 0 0 3px rgba(16,185,129,.15);}
+        .dot.off{background:var(--danger);box-shadow:0 0 0 3px rgba(239,68,68,.15);}
 
-        .btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;font-size:12px;font-weight:600;border-radius:5px;border:none;cursor:pointer;transition:all .12s;font-family:inherit;white-space:nowrap;}
-        .btn-primary{background:var(--accent);color:#fff;}.btn-primary:hover{background:var(--accent-hover);}
-        .btn-outline{background:#fff;color:var(--text-primary);border:1px solid var(--border);}.btn-outline:hover{background:#f8f9fa;}
-        .btn-ghost-danger{background:transparent;color:var(--danger);border:1px solid transparent;}.btn-ghost-danger:hover{background:var(--danger-bg);}
-        .btn-sm{padding:4px 9px;font-size:11px;}
-        .btn-icon{padding:5px 7px;background:transparent;border:none;color:var(--text-muted);cursor:pointer;border-radius:4px;transition:all .1s;font-size:11px;}
-        .btn-icon:hover{background:#f1f3f4;color:var(--text-primary);}
+        .badge{background:linear-gradient(135deg,#eaf1fd,#d9e7fb);color:#3162c4;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;letter-spacing:.2px;border:1px solid rgba(64,120,229,.1);}
 
-        .form-label{display:block;font-size:12px;font-weight:600;color:var(--text-primary);margin-bottom:4px;}
+        .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;font-size:12px;font-weight:600;border-radius:7px;border:none;cursor:pointer;transition:all .15s;font-family:inherit;white-space:nowrap;position:relative;overflow:hidden;}
+        .btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:opacity .15s;opacity:0;}
+        .btn:hover::after{opacity:1;}
+        .btn-primary{background:var(--accent);color:#fff;box-shadow:0 1px 3px rgba(64,120,229,.25);}
+        .btn-primary:hover{background:var(--accent-hover);box-shadow:0 2px 8px rgba(64,120,229,.3);}
+        .btn-outline{background:#fff;color:var(--text-primary);border:1px solid var(--border);box-shadow:0 1px 2px rgba(0,0,0,.04);}
+        .btn-outline:hover{background:#f8fafc;border-color:#d0d5dd;}
+        .btn-ghost-danger{background:var(--danger-bg);color:var(--danger);border:1px solid rgba(239,68,68,.18);}
+        .btn-ghost-danger:hover{background:#fde3e3;border-color:rgba(239,68,68,.35);box-shadow:0 1px 3px rgba(239,68,68,.15);}
+        .btn-sm{padding:4px 10px;font-size:11px;}
+        .edit-actions{display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px;align-items:center;}
+        .edit-actions::-webkit-scrollbar{height:4px;}
+        .edit-actions::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+        .edit-actions .btn{flex-shrink:0;}
+
+        /* Toolbar-style action buttons with icon chips */
+        .act-btn{display:inline-flex;align-items:center;gap:8px;padding:5px 13px 5px 5px;border-radius:9px;border:1px solid var(--border);background:#fff;font-size:12px;font-weight:600;font-family:inherit;color:var(--text-primary);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0;box-shadow:0 1px 2px rgba(15,23,42,.03);}
+        .act-btn:hover{border-color:var(--accent);box-shadow:0 4px 10px -2px rgba(64,120,229,.22);transform:translateY(-1px);}
+        .act-btn:active{transform:translateY(0);}
+        .act-chip{width:25px;height:25px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+        .chip-slate{background:#eef1f6;color:#475569;}
+        .chip-gold{background:#fef3c7;color:#b45309;}
+        .chip-blue{background:#dbe8fb;color:#3162c4;}
+        .chip-violet{background:#ede9fe;color:#7c3aed;}
+        .chip-red{background:#fee2e2;color:#dc2626;}
+        .act-divider{width:1px;align-self:stretch;background:var(--border);margin:0 3px;flex-shrink:0;}
+        .act-btn-danger{border-color:rgba(239,68,68,.22);color:var(--danger);}
+        .act-btn-danger:hover{border-color:var(--danger);box-shadow:0 4px 10px -2px rgba(239,68,68,.22);}
+        .btn-icon{padding:6px 8px;background:transparent;border:none;color:var(--text-muted);cursor:pointer;border-radius:6px;transition:all .15s;font-size:11px;}
+        .btn-icon:hover{background:var(--border-light);color:var(--text-primary);box-shadow:0 1px 2px rgba(0,0,0,.04);}
+
+        .form-label{display:block;font-size:12px;font-weight:600;color:var(--text-primary);margin-bottom:5px;}
         .form-label .req{color:var(--danger);}
-        .form-input,.form-textarea,.form-select{width:100%;padding:7px 10px;font-size:12.5px;font-family:inherit;border:1px solid var(--border);border-radius:5px;background:#fff;color:var(--text-primary);transition:border-color .12s;outline:none;}
-        .form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(79,70,229,.08);}
-        .form-textarea{resize:vertical;min-height:68px;}
-        .form-check{display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer;}
-        .form-check input{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;}
+        .form-input,.form-textarea,.form-select{width:100%;padding:8px 12px;font-size:12.5px;font-family:inherit;border:1px solid var(--border);border-radius:7px;background:#fff;color:var(--text-primary);transition:all .15s;outline:none;}
+        .form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(64,120,229,.1);}
+        .form-textarea{resize:vertical;min-height:72px;}
+        .form-check{display:flex;align-items:center;gap:7px;font-size:12.5px;cursor:pointer;}
+        .form-check input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;}
 
-        .rte{border:1px solid var(--border);border-radius:5px;overflow:hidden;}
-        .rte-bar{background:#fafbfc;border-bottom:1px solid var(--border);padding:4px 5px;display:flex;flex-wrap:wrap;gap:1px;}
-        .rte-bar button{width:26px;height:24px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;border-radius:3px;font-size:10.5px;display:flex;align-items:center;justify-content:center;}
-        .rte-bar button:hover{background:#eef0f2;color:var(--text-primary);}
-        .rte-bar .sep{width:1px;background:#e0e2e6;margin:2px 3px;}
-        .rte-body{padding:9px 10px;min-height:80px;font-size:12.5px;line-height:1.6;outline:none;}
+        .rte{border:1px solid var(--border);border-radius:7px;overflow:hidden;}
+        .rte-bar{background:linear-gradient(to bottom,#fafbfd,#f5f7fa);border-bottom:1px solid var(--border);padding:5px 6px;display:flex;flex-wrap:wrap;gap:1px;align-items:center;}
+        .rte-bar+.rte-bar{border-top:1px solid var(--border-light);}
+        .rte-bar button{width:26px;height:24px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;border-radius:4px;font-size:10.5px;display:flex;align-items:center;justify-content:center;transition:all .1s;flex-shrink:0;}
+        .rte-bar button:hover{background:#e8ebf4;color:var(--text-primary);}
+        .rte-bar button.active-fmt{background:var(--accent-light);color:var(--accent-hover);}
+        .rte-bar .sep{width:1px;background:#dde1ea;margin:2px 3px;flex-shrink:0;align-self:stretch;}
+        .rte-bar select.rte-select{height:24px;font-size:11px;font-family:inherit;border:1px solid var(--border);border-radius:4px;background:#fff;color:var(--text-secondary);padding:0 4px;margin:0 2px;cursor:pointer;}
+        .rte-bar .rte-swatch{width:16px;height:16px;border-radius:3px;border:1px solid rgba(0,0,0,.1);display:inline-block;cursor:pointer;}
+        .rte-body{padding:10px 12px;min-height:82px;font-size:12.5px;line-height:1.6;outline:none;}
+        .rte-body[contenteditable]:empty:before{content:attr(data-placeholder);color:var(--text-muted);}
 
         .search-wrap{position:relative;}
-        .search-wrap i{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:11px;}
-        .search-wrap input{padding-left:30px;}
-        .pager{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-top:1px solid var(--border);font-size:12px;color:var(--text-secondary);}
+        .search-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:11px;}
+        .search-wrap input{padding-left:32px;}
+        .pager{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-top:1px solid var(--border-light);font-size:12px;color:var(--text-secondary);}
         .pager-btns{display:flex;gap:3px;}
-        .pager-btns button{width:28px;height:28px;border:1px solid var(--border);background:#fff;border-radius:4px;cursor:pointer;font-size:12px;color:var(--text-primary);display:flex;align-items:center;justify-content:center;font-family:inherit;}
-        .pager-btns button:hover{border-color:var(--accent);color:var(--accent);}
-        .pager-btns button.on{background:var(--accent);color:#fff;border-color:var(--accent);}
-        .empty{padding:48px 20px;text-align:center;color:var(--text-muted);}
-        .empty i{font-size:28px;margin-bottom:8px;display:block;opacity:.25;}
-        .empty p{font-size:12.5px;}
+        .pager-btns button{width:30px;height:30px;border:1px solid var(--border);background:#fff;border-radius:6px;cursor:pointer;font-size:12px;color:var(--text-primary);display:flex;align-items:center;justify-content:center;font-family:inherit;transition:all .12s;}
+        .pager-btns button:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 2px rgba(64,120,229,.08);}
+        .pager-btns button.on{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 1px 4px rgba(64,120,229,.25);}
+        .empty{padding:52px 20px;text-align:center;color:var(--text-muted);}
+        .empty i{width:56px;height:56px;line-height:56px;border-radius:50%;background:var(--accent-light);color:var(--accent);font-size:20px;margin:0 auto 14px;display:block;}
+        .empty p{font-size:12.5px;max-width:280px;margin:0 auto;}
 
-        .toolbar{display:flex;align-items:center;justify-content:flex-end;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
-        .toolbar-2{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+        .toolbar{display:flex;align-items:center;justify-content:flex-end;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+        .toolbar-2{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
 
-        .sec-title{font-size:12.5px;font-weight:700;color:var(--text-primary);margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border-light);}
+        .sec-title{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border-light);}
         .back{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text-muted);cursor:pointer;text-decoration:none;margin-bottom:14px;transition:color .12s;}
         .back:hover{color:var(--accent);}
 
         .mod-list{list-style:none;}
-        .mod-item{padding:0;border-bottom:1px solid var(--border-light);cursor:grab;transition:background .12s;display:flex;align-items:center;user-select:none;}
+        .mod-item{padding:0;border-bottom:1px solid var(--border-light);cursor:grab;transition:all .12s;display:flex;align-items:center;user-select:none;}
         .mod-item:last-child{border-bottom:none;}
-        .mod-item:hover{background:#f8f9fb;}
-        .mod-item.on{background:var(--accent-light);}
+        .mod-item:hover{background:#f8f9fc;}
+        .mod-item.on{background:linear-gradient(90deg,#eaf1fd,#f5f7ff);border-left:2px solid var(--accent);}
         .mod-item.on .mod-text{color:var(--accent-hover);font-weight:600;}
         .mod-item.on .mod-num{color:var(--accent);}
-        .mod-item.dragging{opacity:.4;}
+        .mod-item.dragging{opacity:.35;}
         .mod-item.drag-over{border-top:2px solid var(--accent);}
-        .mod-grip{padding:10px 8px 10px 10px;color:var(--text-muted);font-size:10px;cursor:grab;flex-shrink:0;}
+        .mod-grip{padding:10px 8px 10px 10px;color:rgba(124,132,155,.5);font-size:10px;cursor:grab;flex-shrink:0;transition:color .1s;}
+        .mod-grip:hover{color:var(--text-secondary);}
         .mod-grip:active{cursor:grabbing;}
         .mod-num{font-weight:700;font-size:11px;min-width:16px;color:var(--text-muted);padding-left:2px;flex-shrink:0;}
         .mod-text{flex:1;font-size:12.5px;color:var(--text-secondary);padding:10px 6px 10px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
         .mod-drop{flex-shrink:0;position:relative;}
-        .mod-drop-btn{padding:8px 10px;background:transparent;border:none;color:var(--text-muted);cursor:pointer;border-radius:4px;font-size:11px;transition:all .1s;}
-        .mod-drop-btn:hover{background:#eef0f2;color:var(--text-primary);}
-        .dropdown-menu{display:none;position:absolute;right:0;top:100%;background:#fff;border:1px solid var(--border);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.1);z-index:100;min-width:150px;padding:4px 0;}
+        .mod-drop-btn{padding:8px 10px;background:transparent;border:none;color:rgba(124,132,155,.5);cursor:pointer;border-radius:4px;font-size:11px;transition:all .1s;}
+        .mod-drop-btn:hover{background:#e8ebf4;color:var(--text-primary);}
+        .dropdown-menu{display:none;position:absolute;right:0;top:100%;background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:100;min-width:155px;padding:5px 0;}
         .dropdown-menu.show{display:block;}
         .dropdown-menu button{display:flex;align-items:center;gap:8px;width:100%;padding:7px 12px;border:none;background:transparent;font-size:12px;font-family:inherit;color:var(--text-primary);cursor:pointer;text-align:left;transition:background .1s;}
-        .dropdown-menu button:hover{background:#f4f5f7;}
+        .dropdown-menu button:hover{background:#f5f7fa;}
         .dropdown-menu button i{width:14px;text-align:center;font-size:11px;color:var(--text-muted);}
         .dropdown-menu button.danger{color:var(--danger);}.dropdown-menu button.danger i{color:var(--danger);}
         .dropdown-menu .dd-sep{height:1px;background:var(--border-light);margin:3px 0;}
 
-        .metric-card{border-radius:8px;padding:18px;color:#fff;}
-        .mc-label{font-size:11px;font-weight:500;opacity:.85;margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px;}
-        .mc-value{font-size:22px;font-weight:700;line-height:1.1;}
-        .mc-blue{background:var(--metric-blue);}.mc-teal{background:var(--metric-teal);}
+        .metric-card{border-radius:12px;padding:20px;color:#fff;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s;}
+        .metric-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px -8px rgba(0,0,0,.25);}
+        .metric-card::after{content:'';position:absolute;top:-24px;right:-24px;width:90px;height:90px;background:rgba(255,255,255,.08);border-radius:50%;}
+        .metric-card::before{content:'';position:absolute;bottom:-30px;right:20px;width:60px;height:60px;background:rgba(255,255,255,.05);border-radius:50%;}
+        .mc-icon{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:14px;margin-bottom:14px;position:relative;}
+        .mc-label{font-size:11px;font-weight:500;opacity:.85;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;position:relative;}
+        .mc-value{font-size:26px;font-weight:800;line-height:1;position:relative;display:flex;align-items:baseline;gap:8px;}
+        .mc-trend{font-size:11px;font-weight:600;opacity:.9;display:inline-flex;align-items:center;gap:3px;}
+        .mc-indigo{background:linear-gradient(135deg,#4078E5,#3162c4);}
+        .mc-emerald{background:linear-gradient(135deg,#10b981,#0d9488);}
+        .mc-amber{background:linear-gradient(135deg,#f59e0b,#d97706);}
+        .mc-rose{background:linear-gradient(135deg,#fb7185,#e11d48);}
+        .report-section-title{font-size:12.5px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin:24px 0 12px;}
+
         .fin-table{width:100%;border-collapse:collapse;font-size:12.5px;}
-        .fin-table thead th{padding:8px 12px;text-align:left;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);border-bottom:1px solid var(--border);background:#fafbfc;}
-        .fin-table tbody td{padding:9px 12px;border-bottom:1px solid var(--border-light);}
+        .fin-table thead th{padding:9px 14px;text-align:left;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);border-bottom:1px solid var(--border);background:linear-gradient(to bottom,#fafbfd,#f5f7fa);}
+        .fin-table tbody td{padding:10px 14px;border-bottom:1px solid var(--border-light);}
         .fin-table tbody tr:last-child td{border-bottom:none;}
-        .fin-table tbody tr:hover{background:#fafbfc;}
-        .fin-amount{font-weight:600;font-variant-numeric:tabular-nums;text-align:right;}
+        .fin-table tbody tr{transition:background .12s;}
+        .fin-table tbody tr:hover{background:linear-gradient(90deg,#f8f8ff 0%,#fafbff 50%,transparent 100%);}
+        .fin-amount{font-weight:700;font-variant-numeric:tabular-nums;text-align:right;}
         .students-dropdown{position:relative;display:inline-block;}
-        .students-dropdown-btn{display:flex;align-items:center;gap:6px;padding:7px 12px;background:#fff;border:1px solid var(--border);border-radius:5px;font-size:12.5px;font-family:inherit;font-weight:500;color:var(--text-primary);cursor:pointer;transition:all .12s;min-width:200px;justify-content:space-between;}
-        .students-dropdown-btn:hover{border-color:#d1d5db;}
+        .students-dropdown-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;background:#fff;border:1px solid var(--border);border-radius:7px;font-size:12.5px;font-family:inherit;font-weight:500;color:var(--text-primary);cursor:pointer;transition:all .15s;min-width:200px;justify-content:space-between;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+        .students-dropdown-btn:hover{border-color:#c7d0db;}
         .students-dropdown-btn i.chevron{font-size:9px;color:var(--text-muted);transition:transform .15s;}
         .students-dropdown-btn.open i.chevron{transform:rotate(180deg);}
-        .students-dropdown-list{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid var(--border);border-radius:5px;box-shadow:0 4px 12px rgba(0,0,0,.08);z-index:60;margin-top:2px;padding:3px 0;}
+        .students-dropdown-list{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid var(--border);border-radius:7px;box-shadow:0 4px 12px rgba(0,0,0,.08);z-index:60;margin-top:4px;padding:4px 0;}
         .students-dropdown-list.show{display:block;}
-        .students-dropdown-list button{display:block;width:100%;padding:7px 12px;border:none;background:transparent;font-size:12.5px;font-family:inherit;color:var(--text-primary);cursor:pointer;text-align:left;transition:background .1s;}
-        .students-dropdown-list button:hover{background:#f4f5f7;}
-        .inline-input{padding:4px 7px;font-size:12px;font-family:inherit;border:1px solid var(--accent);border-radius:4px;outline:none;width:100%;box-shadow:0 0 0 2px rgba(79,70,229,.08);}
+        .students-dropdown-list button{display:block;width:100%;padding:8px 14px;border:none;background:transparent;font-size:12.5px;font-family:inherit;color:var(--text-primary);cursor:pointer;text-align:left;transition:background .1s;}
+        .students-dropdown-list button:hover{background:#f5f7fa;}
+        .inline-input{padding:5px 8px;font-size:12px;font-family:inherit;border:1px solid var(--accent);border-radius:5px;outline:none;width:100%;box-shadow:0 0 0 3px rgba(64,120,229,.1);}
 
+        /* Edit page tabs */
+        .edit-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:0;}
+        .edit-tab{padding:10px 20px;font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:inherit;position:relative;transition:all .15s;border-bottom:2px solid transparent;margin-bottom:-2px;}
+        .edit-tab:hover{color:var(--text-primary);background:rgba(64,120,229,.03);}
+        .edit-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:linear-gradient(to bottom,rgba(64,120,229,.04),transparent);}
+        .edit-tab i{margin-right:6px;font-size:12px;}
+        .tab-content{display:none;}.tab-content.active{display:block;}
 
-        .badge{
-            background: #c3c7f8;
-            padding: 2px 6px;
-            width: 50px !important;
-            display: inline-block;
-            border-radius: 12px;
-            text-align: center;
-        }
- 
+        /* Exam settings */
+        .exam-field{margin-bottom:18px;}
+        .exam-field-label{font-size:12.5px;font-weight:600;color:var(--text-primary);margin-bottom:6px;display:block;}
+        .exam-field-desc{font-size:12px;color:var(--text-muted);margin-bottom:4px;}
+        .exam-info-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,#f8fafc,#f1f5f9);border-radius:7px;border:1px solid var(--border-light);margin-bottom:16px;}
+        .exam-info-row i{color:var(--accent);font-size:14px;flex-shrink:0;}
+        .exam-info-row span{font-size:12.5px;color:var(--text-secondary);}
+        .exam-info-row strong{color:var(--text-primary);font-weight:700;}
+        .exam-num-input{width:80px;padding:7px 10px;font-size:13px;font-family:inherit;border:1px solid var(--border);border-radius:7px;background:#fff;color:var(--text-primary);outline:none;text-align:center;font-weight:600;transition:all .15s;}
+        .exam-num-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(64,120,229,.1);}
+        .radio-group{display:flex;gap:20px;align-items:center;}
+        .radio-group label{display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer;color:var(--text-primary);}
+        .radio-group input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;}
+
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;}}
+
+        /* ===== Responsive ===== */
+        #mobile-menu-btn{display:none;}
+        .sidebar-backdrop{display:none;}
+        @media(max-width:1180px){
+            #page-edit-course > div[style*="grid-template-columns:280px 1fr"]{grid-template-columns:1fr;}
+        }
+        @media(max-width:900px){
+            #mobile-menu-btn{display:flex;}
+            .sidebar{transform:translateX(-100%);opacity:0;pointer-events:none;}
+            .sidebar.mobile-open{transform:translateX(0);opacity:1;pointer-events:auto;}
+            .sidebar.hidden-sidebar{transform:translateX(-100%);opacity:0;}
+            .main,.main.full-width{margin-left:0;}
+            .main-content{padding:18px 16px;}
+            .sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(15,18,32,.4);z-index:40;}
+            .sidebar.mobile-open ~ .sidebar-backdrop,body.sidebar-open .sidebar-backdrop{display:block;}
+            .profile-info{display:none;}
+            .header-sales{display:none;}
+            .main-header{padding:0 14px;}
+            #page-reports > div[style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:1fr 1fr;}
+        }
+        @media(max-width:600px){
+            .main-content{padding:14px 12px;}
+            .page-heading .ph-title{font-size:18px;}
+            .toolbar,.toolbar-2{justify-content:stretch;}
+            .toolbar .btn,.toolbar-2 .btn,.toolbar .search-wrap,.toolbar-2 .search-wrap{width:100%;}
+            .toolbar .search-wrap input,.toolbar-2 .search-wrap input{width:100%!important;}
+            #page-reports > div[style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:1fr;}
+            .data-table,.fin-table{font-size:11.5px;}
+            .card{overflow-x:auto;}
+        }
+        .action-btns{
+            display: flex;
+        }
     </style>
 </head>
 <body>
@@ -200,32 +291,32 @@
         <div class="brand-icon">L</div>
         <div class="brand-text"><h1>Lexington Campus</h1><span>Administration</span></div>
     </div>
-<nav class="sidebar-nav">
-    <div class="nav-label">Main</div>
-    <a class="nav-item" data-page="users"><i class="fa-solid fa-users"></i> Users</a>
-    <a class="nav-item" data-page="schools"><i class="fa-solid fa-school"></i> Schools</a>
-    
-    <div class="nav-label">Learning</div>
-    <a class="nav-item" data-page="courses"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
-    
-    <div class="submenu">
-        <a class="nav-item" data-page="list-courses"><i class="fa-solid fa-list"></i> List of Courses</a>
-        <a class="nav-item" data-page="packages"><i class="fa-solid fa-box"></i> Packages</a>
-        <a class="nav-item" data-page="glossary"><i class="fa-solid fa-book"></i> Glossary</a>
-        <a class="nav-item" data-page="categories"><i class="fa-solid fa-tags"></i> Categories</a>
-        <a class="nav-item" data-page="publish"><i class="fa-solid fa-upload"></i> Publish</a>
-    </div>
-    
-    <div class="nav-label">Analytics</div>
-    <a class="nav-item" data-page="reports"><i class="fa-solid fa-chart-bar"></i> Reports</a>
-</nav>
+    <nav class="sidebar-nav">
+        <div class="nav-label">Main</div>
+        <a class="nav-item" data-page="users"><i class="fa-solid fa-users"></i> Users</a>
+        <a class="nav-item" data-page="schools"><i class="fa-solid fa-school"></i> Schools</a>
+        <div class="nav-label">Learning</div>
+        <a class="nav-item active" data-page="courses"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+        <div style="padding:0 0 0 10px;">
+            <a class="nav-item nav-sub" data-page="courses" data-sub="courses"><i class="fa-solid fa-list" style="width:14px;font-size:9.5px;"></i> List of Courses</a>
+            <a class="nav-item nav-sub" data-page="import" data-sub="import"><i class="fa-solid fa-file-import" style="width:14px;font-size:9.5px;"></i> Import</a>
+            <a class="nav-item nav-sub" data-page="packages" data-sub="packages"><i class="fa-solid fa-box" style="width:14px;font-size:9.5px;"></i> Packages</a>
+            <a class="nav-item nav-sub" data-page="glossary" data-sub="glossary"><i class="fa-solid fa-book" style="width:14px;font-size:9.5px;"></i> Glossary</a>
+            <a class="nav-item nav-sub" data-page="categories" data-sub="categories"><i class="fa-solid fa-tags" style="width:14px;font-size:9.5px;"></i> Categories</a>
+            <a class="nav-item nav-sub" data-page="publish" data-sub="publish"><i class="fa-solid fa-upload" style="width:14px;font-size:9.5px;"></i> Publish</a>
+        </div>
+        <div class="nav-label">Analytics</div>
+        <a class="nav-item" data-page="reports"><i class="fa-solid fa-chart-bar"></i> Reports</a>
+    </nav>
 </aside>
+<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeMobileSidebar()"></div>
 
 <div class="main" id="main">
     <header class="main-header">
         <div class="header-left">
+            <button class="header-icon" id="mobile-menu-btn" onclick="toggleSidebar()" title="Menu"><i class="fa-solid fa-bars"></i></button>
             <button class="header-icon" data-tab="chats" title="Chats"><i class="fa-solid fa-comments"></i><span class="icon-badge"></span></button>
-            <button class="header-icon active-tab" data-tab="documents" title="Documents"><i class="fa-solid fa-file-lines"></i></button>
+            <button class="header-icon" data-tab="documents" title="Documents"><i class="fa-solid fa-file-lines"></i></button>
             <button class="header-icon" data-tab="info" title="Information"><i class="fa-solid fa-circle-info"></i></button>
             <button class="header-icon" data-tab="videos" title="Videos"><i class="fa-solid fa-video"></i></button>
             <button class="header-icon" data-tab="email" title="Email"><i class="fa-solid fa-envelope"></i><span class="icon-badge"></span></button>
@@ -235,10 +326,7 @@
         <div class="header-right">
             <div class="profile-trigger" id="profile-trigger" onclick="toggleProfile()">
                 <div class="profile-avatar">A</div>
-                <div class="profile-info">
-                    <div class="profile-name">Admin</div>
-                    <div class="profile-email">info@lexingtonpublishingco.com</div>
-                </div>
+                <div class="profile-info"><div class="profile-name">Admin</div><div class="profile-email">info@lexingtonpublishingco.com</div></div>
                 <i class="fa-solid fa-chevron-down profile-chevron"></i>
             </div>
             <div class="profile-dropdown" id="profile-dropdown">
@@ -266,10 +354,10 @@
             </div>
             <div class="card">
                 <table class="data-table">
-                    <thead><tr><th style="width:50px;">Status</th><th>Course Title</th><th>Version</th><th>Schools</th><th>Created on</th><th>Author Name</th><th style="width:80px;" class="th-actions">Actions</th></tr></thead>
+                    <thead><tr><th style="width:50px;">Status</th><th>Course Title</th><th style="width:80px;">Version</th><th>Schools</th><th>Created on</th><th>Author Name</th><th style="width:80px;" class="th-actions">Actions</th></tr></thead>
                     <tbody>
-                        <tr><td><span class="dot on"></span></td><td style="font-weight:600;">12-6-2019 TREC Test Course</td><td > <span class="badge">ver.2</span></td><td>Train Agents</td><td>June 12, 2020</td><td>John Smith</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" onclick="go('edit-course')" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
-                        <tr><td><span class="dot on"></span></td><td style="font-weight:600;">12-6-2019 TREC Test Course</td><td> <span class="badge">ver.3</span></td><td>Train Agents</td><td>June 12, 2020</td><td>John Smith</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                        <tr><td><span class="dot on"></span></td><td style="font-weight:600;">12-6-2019 TREC Test Course</td><td><span class="badge">ver.2</span></td><td>Train Agents</td><td>June 12, 2020</td><td>John Smith</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" onclick="go('edit-course')" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                        <tr><td><span class="dot on"></span></td><td style="font-weight:600;">12-6-2019 TREC Test Course</td><td><span class="badge">ver.3</span></td><td>Train Agents</td><td>June 12, 2020</td><td>John Smith</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
                         <tr><td><span class="dot on"></span></td><td style="font-weight:600;">2018-19 CE Legal Update Part I</td><td><span class="badge">ver.1</span></td><td>Webnet Real Estate School</td><td>May 15, 2019</td><td>Sarah Johnson</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" onclick="go('edit-course')" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
                         <tr><td><span class="dot off"></span></td><td style="font-weight:600;">2018-19 CE Legal Update Part II</td><td><span class="badge">ver.1</span></td><td>Webnet Real Estate School</td><td>May 15, 2019</td><td>Sarah Johnson</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
                         <tr><td><span class="dot on"></span></td><td style="font-weight:600;">Texas Real Estate Principles</td><td><span class="badge">ver.1</span></td><td>Train Agents</td><td>March 3, 2020</td><td>Michael Davis</td><td class="td-actions"><div class="action-btns"><button class="btn-icon" onclick="go('edit-course')" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Preview"><i class="fa-solid fa-eye"></i></button></div></td></tr>
@@ -288,28 +376,43 @@
                 <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> Add Course</div>
                 <div class="ph-title">Add Course</div>
             </div>
-            <div class="card" style="padding:22px;">
+            <div class="card" style="padding:24px;">
                 <div class="sec-title">General Information</div>
-                <div style="margin-bottom:18px;"><label class="form-label">Course title <span class="req">*</span></label><input type="text" class="form-input" placeholder="Enter course title"></div>
-                <div style="margin-bottom:18px;"><label class="form-label">Course description <span class="req">*</span></label><div class="rte"><div class="rte-bar"><button onclick="rte('bold')"><i class="fa-solid fa-bold"></i></button><button onclick="rte('italic')"><i class="fa-solid fa-italic"></i></button><button onclick="rte('underline')"><i class="fa-solid fa-underline"></i></button><div class="sep"></div><button onclick="rte('justifyLeft')"><i class="fa-solid fa-align-left"></i></button><button onclick="rte('justifyCenter')"><i class="fa-solid fa-align-center"></i></button><button onclick="rte('justifyRight')"><i class="fa-solid fa-align-right"></i></button><div class="sep"></div><button onclick="rte('insertUnorderedList')"><i class="fa-solid fa-list-ul"></i></button><button onclick="rte('insertOrderedList')"><i class="fa-solid fa-list-ol"></i></button></div><div class="rte-body" contenteditable="true"></div></div></div>
-                <div style="margin-bottom:18px;"><label class="form-label">Short description <span class="req">*</span></label><div class="rte"><div class="rte-bar"><button onclick="rte('bold')"><i class="fa-solid fa-bold"></i></button><button onclick="rte('italic')"><i class="fa-solid fa-italic"></i></button><button onclick="rte('underline')"><i class="fa-solid fa-underline"></i></button><div class="sep"></div><button onclick="rte('justifyLeft')"><i class="fa-solid fa-align-left"></i></button><button onclick="rte('justifyCenter')"><i class="fa-solid fa-align-center"></i></button><button onclick="rte('justifyRight')"><i class="fa-solid fa-align-right"></i></button></div><div class="rte-body" contenteditable="true"></div></div></div>
-                <div style="display:flex;gap:7px;"><button class="btn btn-primary">Save</button><button class="btn btn-outline" onclick="go('courses')">Cancel</button></div>
+                <div style="margin-bottom:18px;"><label class="form-label">Course title <span class="req"></span></label><input type="text" class="form-input" placeholder="Enter course title"></div>
+                <div style="margin-bottom:18px;"><label class="form-label">Course description <span class="req"></span></label><div class="rte"><div class="rte-bar"><button onclick="rte('bold')"><i class="fa-solid fa-bold"></i></button><button onclick="rte('italic')"><i class="fa-solid fa-italic"></i></button><button onclick="rte('underline')"><i class="fa-solid fa-underline"></i></button><div class="sep"></div><button onclick="rte('justifyLeft')"><i class="fa-solid fa-align-left"></i></button><button onclick="rte('justifyCenter')"><i class="fa-solid fa-align-center"></i></button><button onclick="rte('justifyRight')"><i class="fa-solid fa-align-right"></i></button><div class="sep"></div><button onclick="rte('insertUnorderedList')"><i class="fa-solid fa-list-ul"></i></button><button onclick="rte('insertOrderedList')"><i class="fa-solid fa-list-ol"></i></button></div><div class="rte-body" contenteditable="true"></div></div></div>
+                <div style="margin-bottom:18px;"><label class="form-label">Short description <span class="req"></span></label><div class="rte"><div class="rte-bar"><button onclick="rte('bold')"><i class="fa-solid fa-bold"></i></button><button onclick="rte('italic')"><i class="fa-solid fa-italic"></i></button><button onclick="rte('underline')"><i class="fa-solid fa-underline"></i></button><div class="sep"></div><button onclick="rte('justifyLeft')"><i class="fa-solid fa-align-left"></i></button><button onclick="rte('justifyCenter')"><i class="fa-solid fa-align-center"></i></button><button onclick="rte('justifyRight')"><i class="fa-solid fa-align-right"></i></button></div><div class="rte-body" contenteditable="true"></div></div></div>
+                <div style="display:flex;gap:8px;"><button class="btn btn-primary">Save</button><button class="btn btn-outline" onclick="go('courses')">Cancel</button></div>
             </div>
         </div>
 
-        <!-- PAGE: Edit Course -->
+        <!-- PAGE: Edit Course (UPDATED with tabs) -->
         <div class="page" id="page-edit-course">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <!-- Top action bar -->
+            <div style="display:flex;align-items:center;gap:20px;margin-bottom:18px;flex-wrap:wrap;">
                 <button class="btn btn-outline" onclick="go('courses')" style="padding:6px 10px;"><i class="fa-solid fa-arrow-left"></i></button>
-                <h3 style="font-size:15px;font-weight:700;">Edit course 2018-19 CE Legal Update Part I version: 1</h3>
-                <div style="margin-left:auto;display:flex;gap:7px;">
-                    <button class="btn btn-outline"><i class="fa-solid fa-file-lines"></i> Course documentation</button>
-                    <button class="btn btn-outline"><i class="fa-solid fa-certificate"></i> Add / View Certificate</button>
+                <h3 style="font-size:15px;font-weight:700;">Edit course 2018-19 CE Legal Update Part I <span style="color:var(--danger);">version: 1</span></h3>
+                <div class="edit-actions" style="margin-left:auto; padding-top: 10px;">
+                    <button class="act-btn" onclick="showToast('Opening course documentation...')"><span class="act-chip chip-slate"><i class="fa-solid fa-file-lines"></i></span> Course documentation</button>
+                    <button class="act-btn" onclick="showToast('Opening certificate...')"><span class="act-chip chip-gold"><i class="fa-solid fa-certificate"></i></span> Add / View Certificate</button>
+                    <div class="act-divider"></div>
+                    <button class="act-btn" onclick="showToast('Opening PDF preview...')"><span class="act-chip chip-blue"><i class="fa-solid fa-eye"></i></span> Preview PDF</button>
+                    <button class="act-btn" onclick="showToast('Generating PDFs...')"><span class="act-chip chip-blue"><i class="fa-solid fa-file-pdf"></i></span> Generate PDFs</button>
+                    <div class="act-divider"></div>
+                    <button class="act-btn" onclick="showToast('Opening course notes...')"><span class="act-chip chip-slate"><i class="fa-solid fa-note-sticky"></i></span> Course notes</button>
+                    <button class="act-btn" onclick="showToast('Course duplicated')"><span class="act-chip chip-violet"><i class="fa-solid fa-copy"></i></span> Copy course</button>
+                    <div class="act-divider"></div>
+                    <button class="act-btn act-btn-danger" onclick="showToast('Course deleted')"><span class="act-chip chip-red"><i class="fa-solid fa-trash"></i></span> Delete course</button>
                 </div>
             </div>
+            <!-- Main layout: modules sidebar + content area -->
             <div style="display:grid;grid-template-columns:280px 1fr;gap:14px;">
-                <div class="card" style="overflow:hidden;">
-                    <div style="padding:9px 12px;background:#fafbfc;border-bottom:1px solid var(--border);font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);display:flex;align-items:center;justify-content:space-between;"><span>Modules</span><span style="font-size:10px;font-weight:500;text-transform:none;letter-spacing:0;">Drag to reorder</span></div>
+                <!-- Left: Modules list -->
+                <div class="card" style="overflow:hidden;align-self:start;">
+                    <div style="padding:10px 12px;background:linear-gradient(to bottom,#fafbfd,#f5f7fa);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                        <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);">Modules</span>
+                        <button class="btn btn-primary btn-sm" onclick="showToast('New lesson added')"><i class="fa-solid fa-plus"></i> Add Lesson</button>
+                    </div>
+                    <div style="padding:6px 12px;font-size:10px;color:var(--text-muted);border-bottom:1px solid var(--border-light);">Drag to reorder</div>
                     <ul class="mod-list" id="mod-list">
                         <li class="mod-item on" draggable="true" data-id="1"><span class="mod-grip"><i class="fa-solid fa-grip-vertical"></i></span><span class="mod-num">1</span><span class="mod-text">Promulgated Contract & Addenda</span><span class="mod-drop"><button class="mod-drop-btn" onclick="toggleDrop(this)"><i class="fa-solid fa-ellipsis-vertical"></i></button><div class="dropdown-menu"><button onclick="modAction('edit')"><i class="fa-solid fa-pen"></i> Edit module</button><button onclick="modAction('duplicate')"><i class="fa-solid fa-copy"></i> Duplicate</button><div class="dd-sep"></div><button onclick="modAction('up')"><i class="fa-solid fa-arrow-up"></i> Move up</button><button onclick="modAction('down')"><i class="fa-solid fa-arrow-down"></i> Move down</button><div class="dd-sep"></div><button class="danger" onclick="modAction('delete')"><i class="fa-solid fa-trash"></i> Delete module</button></div></span></li>
                         <li class="mod-item" draggable="true" data-id="2"><span class="mod-grip"><i class="fa-solid fa-grip-vertical"></i></span><span class="mod-num">2</span><span class="mod-text">Agency Relationships</span><span class="mod-drop"><button class="mod-drop-btn" onclick="toggleDrop(this)"><i class="fa-solid fa-ellipsis-vertical"></i></button><div class="dropdown-menu"><button onclick="modAction('edit')"><i class="fa-solid fa-pen"></i> Edit module</button><button onclick="modAction('duplicate')"><i class="fa-solid fa-copy"></i> Duplicate</button><div class="dd-sep"></div><button onclick="modAction('up')"><i class="fa-solid fa-arrow-up"></i> Move up</button><button onclick="modAction('down')"><i class="fa-solid fa-arrow-down"></i> Move down</button><div class="dd-sep"></div><button class="danger" onclick="modAction('delete')"><i class="fa-solid fa-trash"></i> Delete module</button></div></span></li>
@@ -320,16 +423,168 @@
                     </ul>
                     <div style="padding:10px 12px;border-top:1px solid var(--border);"><button class="btn btn-outline" style="width:100%;justify-content:center;font-size:11.5px;"><i class="fa-solid fa-plus"></i> Add module</button></div>
                 </div>
+
+                <!-- Right: Tabbed content area -->
                 <div>
-                    <div class="card" style="padding:18px;margin-bottom:14px;">
-                        <div class="sec-title">Post completion requirements</div>
-                        <div class="rte"><div class="rte-bar"><button onclick="rte('bold')"><i class="fa-solid fa-bold"></i></button><button onclick="rte('italic')"><i class="fa-solid fa-italic"></i></button><button onclick="rte('underline')"><i class="fa-solid fa-underline"></i></button><div class="sep"></div><button onclick="rte('justifyLeft')"><i class="fa-solid fa-align-left"></i></button><button onclick="rte('justifyCenter')"><i class="fa-solid fa-align-center"></i></button><button onclick="rte('justifyRight')"><i class="fa-solid fa-align-right"></i></button><div class="sep"></div><button onclick="rte('insertUnorderedList')"><i class="fa-solid fa-list-ul"></i></button><button onclick="rte('insertOrderedList')"><i class="fa-solid fa-list-ol"></i></button></div><div class="rte-body" contenteditable="true">Upon successful completion of all course modules, the student must pass the final examination with a minimum score of 70%. A certificate of completion will be issued within 5 business days.</div></div>
-                    </div>
-                    <div class="card" style="padding:18px;">
-                        <div class="sec-title">Additional course information</div>
-                        <div style="margin-bottom:14px;"><label class="form-label">Objective</label><textarea class="form-textarea" rows="3">This course provides continuing education on recent legislative changes and updates affecting real estate practice in Texas.</textarea></div>
-                        <div style="margin-bottom:14px;"><label class="form-label">Abilities</label><textarea class="form-textarea" rows="3">Students will be able to identify and apply current legal requirements, understand updated contract forms, and demonstrate compliance with TREC regulations.</textarea></div>
-                        <div style="display:flex;gap:7px;margin-top:14px;"><button class="btn btn-primary" onclick="go('courses')"><i class="fa-solid fa-check"></i> Save</button><button class="btn btn-outline" onclick="go('courses')">Cancel</button></div>
+                    <div class="card">
+                        <!-- Tab bar -->
+                        <div class="edit-tabs">
+                            <button class="edit-tab active" onclick="switchEditTab('details', this)"><i class="fa-solid fa-circle-info"></i> Course Details</button>
+                            <button class="edit-tab" onclick="switchEditTab('exam', this)"><i class="fa-solid fa-file-circle-check"></i> Final Exam</button>
+                        </div>
+
+                        <!-- TAB: Course Details -->
+                        <div class="tab-content active" id="tab-details" style="padding:18px;">
+                            <!-- General Information -->
+                            <div class="sec-title">General Information</div>
+                            <div style="margin-bottom:16px;">
+                                <label class="form-label">Course title <span class="req"></span></label>
+                                <input type="text" class="form-input" value="2018-19 CE Legal Update Part I">
+                            </div>
+                            <div style="margin-bottom:16px;">
+                                <label class="form-label">Course description <span class="req"></span></label>
+                                <div class="rte">
+                                    <div class="rte-bar">
+                                        <button title="Source" onclick="showToast('Source view')"><i class="fa-solid fa-code"></i></button>
+                                        <button title="Save" onclick="showToast('Draft saved')"><i class="fa-solid fa-floppy-disk"></i></button>
+                                        <button title="Preview" onclick="showToast('Opening preview...')"><i class="fa-solid fa-eye"></i></button>
+                                        <button title="Templates" onclick="showToast('Templates')"><i class="fa-solid fa-table-cells-large"></i></button>
+                                        <div class="sep"></div>
+                                        <button title="Cut" onclick="rte('cut')"><i class="fa-solid fa-scissors"></i></button>
+                                        <button title="Copy" onclick="rte('copy')"><i class="fa-solid fa-copy"></i></button>
+                                        <button title="Paste" onclick="showToast('Pasted')"><i class="fa-solid fa-paste"></i></button>
+                                        <div class="sep"></div>
+                                        <button title="Undo" onclick="rte('undo')"><i class="fa-solid fa-rotate-left"></i></button>
+                                        <button title="Redo" onclick="rte('redo')"><i class="fa-solid fa-rotate-right"></i></button>
+                                        <div class="sep"></div>
+                                        <button title="Find" onclick="showToast('Find & replace')"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                        <button title="Spell check" onclick="showToast('Checking spelling...')"><i class="fa-solid fa-spell-check"></i></button>
+                                    </div>
+                                    <div class="rte-bar">
+                                        <select class="rte-select" onchange="rte('formatBlock', this.value)"><option value="p">Paragraph</option><option value="h2">Heading 2</option><option value="h3">Heading 3</option><option value="h4">Heading 4</option><option value="pre">Formatted</option></select>
+                                        <div class="sep"></div>
+                                        <button title="Insert table" onclick="showToast('Insert table')"><i class="fa-solid fa-table"></i></button>
+                                        <button title="Insert image" onclick="showToast('Insert image')"><i class="fa-solid fa-image"></i></button>
+                                        <button title="Insert link" onclick="showToast('Insert link')"><i class="fa-solid fa-link"></i></button>
+                                        <button title="Horizontal line" onclick="rte('insertHorizontalRule')"><i class="fa-solid fa-minus"></i></button>
+                                        <div class="sep"></div>
+                                        <button title="Blockquote" onclick="rte('formatBlock','blockquote')"><i class="fa-solid fa-quote-right"></i></button>
+                                        <button title="Decrease indent" onclick="rte('outdent')"><i class="fa-solid fa-outdent"></i></button>
+                                        <button title="Increase indent" onclick="rte('indent')"><i class="fa-solid fa-indent"></i></button>
+                                        <div class="sep"></div>
+                                        <button title="Text color"><span class="rte-swatch" style="background:#ef4444;"></span></button>
+                                        <button title="Background color"><span class="rte-swatch" style="background:#fde68a;"></span></button>
+                                        <div class="sep"></div>
+                                        <button title="Show blocks" onclick="showToast('Show blocks')"><i class="fa-solid fa-diagram-project"></i></button>
+                                        <button title="Fullscreen" onclick="showToast('Fullscreen')"><i class="fa-solid fa-expand"></i></button>
+                                    </div>
+                                    <div class="rte-bar">
+                                        <button title="Bold" onclick="rte('bold')"><i class="fa-solid fa-bold"></i></button>
+                                        <button title="Italic" onclick="rte('italic')"><i class="fa-solid fa-italic"></i></button>
+                                        <button title="Underline" onclick="rte('underline')"><i class="fa-solid fa-underline"></i></button>
+                                        <button title="Strikethrough" onclick="rte('strikeThrough')"><i class="fa-solid fa-strikethrough"></i></button>
+                                        <button title="Subscript" onclick="rte('subscript')"><i class="fa-solid fa-subscript"></i></button>
+                                        <button title="Superscript" onclick="rte('superscript')"><i class="fa-solid fa-superscript"></i></button>
+                                        <div class="sep"></div>
+                                        <button title="Align left" onclick="rte('justifyLeft')"><i class="fa-solid fa-align-left"></i></button>
+                                        <button title="Align center" onclick="rte('justifyCenter')"><i class="fa-solid fa-align-center"></i></button>
+                                        <button title="Align right" onclick="rte('justifyRight')"><i class="fa-solid fa-align-right"></i></button>
+                                        <button title="Justify" onclick="rte('justifyFull')"><i class="fa-solid fa-align-justify"></i></button>
+                                        <div class="sep"></div>
+                                        <button title="Bulleted list" onclick="rte('insertUnorderedList')"><i class="fa-solid fa-list-ul"></i></button>
+                                        <button title="Numbered list" onclick="rte('insertOrderedList')"><i class="fa-solid fa-list-ol"></i></button>
+                                        <div class="sep"></div>
+                                        <button title="Special character" onclick="showToast('Special character')"><i class="fa-solid fa-omega"></i></button>
+                                        <button title="Anchor" onclick="showToast('Anchor inserted')"><i class="fa-solid fa-anchor"></i></button>
+                                    </div>
+                                    <div class="rte-body" contenteditable="true" data-placeholder="Enter course description..."></div>
+                                </div>
+                            </div>
+
+                            <!-- Post completion requirements -->
+                            <div class="sec-title" style="margin-top:20px;">Post completion requirements</div>
+                            <div class="rte">
+                                <div class="rte-bar">
+                                    <button onclick="rte('bold')"><i class="fa-solid fa-bold"></i></button>
+                                    <button onclick="rte('italic')"><i class="fa-solid fa-italic"></i></button>
+                                    <button onclick="rte('underline')"><i class="fa-solid fa-underline"></i></button>
+                                    <div class="sep"></div>
+                                    <button onclick="rte('justifyLeft')"><i class="fa-solid fa-align-left"></i></button>
+                                    <button onclick="rte('justifyCenter')"><i class="fa-solid fa-align-center"></i></button>
+                                    <button onclick="rte('justifyRight')"><i class="fa-solid fa-align-right"></i></button>
+                                    <div class="sep"></div>
+                                    <button onclick="rte('insertUnorderedList')"><i class="fa-solid fa-list-ul"></i></button>
+                                    <button onclick="rte('insertOrderedList')"><i class="fa-solid fa-list-ol"></i></button>
+                                </div>
+                                <div class="rte-body" contenteditable="true">Upon successful completion of all course modules, the student must pass the final examination with a minimum score of 70%. A certificate of completion will be issued within 5 business days.</div>
+                            </div>
+
+                            <!-- Additional course information -->
+                            <div class="sec-title" style="margin-top:20px;">Additional course information</div>
+                            <div style="margin-bottom:14px;">
+                                <label class="form-label">Objective</label>
+                                <textarea class="form-textarea" rows="3">This course provides continuing education on recent legislative changes and updates affecting real estate practice in Texas.</textarea>
+                            </div>
+                            <div style="margin-bottom:14px;">
+                                <label class="form-label">Abilities</label>
+                                <textarea class="form-textarea" rows="3">Students will be able to identify and apply current legal requirements, understand updated contract forms, and demonstrate compliance with TREC regulations.</textarea>
+                            </div>
+                            <div style="display:flex;gap:8px;margin-top:16px;">
+                                <button class="btn btn-primary" onclick="go('courses')"><i class="fa-solid fa-check"></i> Save</button>
+                                <button class="btn btn-outline" onclick="go('courses')">Cancel</button>
+                            </div>
+                        </div>
+
+                        <!-- TAB: Final Exam -->
+                        <div class="tab-content" id="tab-exam" style="padding:18px;">
+                            <!-- Quick exam actions -->
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+                                <button class="btn" style="background:#0d9488;color:#fff;box-shadow:0 1px 3px rgba(13,148,136,.25);" onclick="showToast('Opening course questions...')"><i class="fa-solid fa-list-check"></i> View course questions</button>
+                                <button class="btn" style="background:#f59e0b;color:#fff;box-shadow:0 1px 3px rgba(245,158,11,.25);" onclick="showToast('Opening exam preview...')"><i class="fa-solid fa-eye"></i> Exam Preview</button>
+                                <button class="btn btn-primary" onclick="showToast('Opening sample exam...')"><i class="fa-solid fa-file-circle-question"></i> Sample exam</button>
+                                <button class="btn btn-primary" onclick="showToast('Opening exam question takes...')"><i class="fa-solid fa-clipboard-list"></i> Exam question takes</button>
+                            </div>
+
+                            <!-- Exam Title -->
+                            <div class="exam-field">
+                                <label class="exam-field-label">Exam Title</label>
+                                <input type="text" class="form-input" value="Final Exam for Course #227" style="max-width:480px;">
+                            </div>
+
+                            <!-- Available questions info -->
+                            <div class="exam-info-row">
+                                <i class="fa-solid fa-circle-question"></i>
+                                <span>Number of exam questions available in this course: <strong>0</strong></span>
+                            </div>
+
+                            <!-- Number of questions -->
+                            <div class="exam-field">
+                                <label class="exam-field-label">Number of questions:</label>
+                                <input type="number" class="exam-num-input" value="1" min="0" max="999">
+                            </div>
+
+                            <!-- Randomize order -->
+                            <div class="exam-field">
+                                <label class="exam-field-label">Randomize order</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="randomize" value="yes"> Yes</label>
+                                    <label><input type="radio" name="randomize" value="no" checked> No</label>
+                                </div>
+                            </div>
+
+                            <!-- Show questions in topic order -->
+                            <div class="exam-field">
+                                <label class="form-check"><input type="checkbox"> Show questions in topic order</label>
+                            </div>
+
+                            <!-- Action buttons -->
+                            <div style="display:flex;gap:8px;margin-top:24px;padding-top:18px;border-top:1px solid var(--border-light);">
+                                <div style="margin-left:auto;display:flex;gap:8px;">
+                                    <button class="btn btn-primary" onclick="go('courses')"><i class="fa-solid fa-check"></i> Save</button>
+                                    <button class="btn btn-outline" onclick="go('courses')">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -346,7 +601,7 @@
                 <button class="btn btn-primary"><i class="fa-solid fa-upload"></i> Upload file to Import</button>
             </div>
             <div class="card">
-                <table class="data-table"><thead><tr><th>Files</th><th>Current course title</th><th>Original Course ID</th><th>Imported on</th><th>Author Name</th><th style="width:80px;" class="th-actions">Actions</th></tr></thead><tbody><tr><td colspan="6"><div class="empty"><i class="fa-solid fa-inbox"></i><p>No items to display</p></div></td></tr></tbody></table>
+                <table class="data-table"><thead><tr><th>Files</th><th>Current course title</th><th>Original Course ID</th><th>Imported on</th><th>Author Name</th><th style="width:80px;" class="th-actions">Actions</th></tr></thead><tbody><tr><td colspan="6"><div class="empty"><i class="fa-solid fa-inbox" style="display:block;"></i><p>No items to display</p></div></td></tr></tbody></table>
             </div>
         </div>
 
@@ -358,10 +613,10 @@
             </div>
             <div class="toolbar-2">
                 <div class="search-wrap"><i class="fa-solid fa-search"></i><input type="text" class="form-input" placeholder="Search by package name" style="width:230px;"></div>
-              <div>
-                <button class="btn btn-ghost-danger"><i class="fa-solid fa-trash"></i> Delete selected</button>
-                <button class="btn btn-primary" onclick="go('add-package')"><i class="fa-solid fa-plus"></i> New package</button>
-            </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn btn-ghost-danger"><i class="fa-solid fa-trash"></i> Delete selected</button>
+                    <button class="btn btn-primary" onclick="go('add-package')"><i class="fa-solid fa-plus"></i> New package</button>
+                </div>
             </div>
             <div class="card">
                 <table class="data-table">
@@ -385,26 +640,26 @@
                 <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> Add New Package</div>
                 <div class="ph-title">Add New Package</div>
             </div>
-            <div class="card" style="padding:22px;margin-bottom:14px;">
+            <div class="card" style="padding:24px;margin-bottom:14px;">
                 <div class="sec-title">General</div>
-                <div style="margin-bottom:16px;"><label class="form-label">Package name <span class="req">*</span></label><input type="text" class="form-input" placeholder="Enter package name"></div>
+                <div style="margin-bottom:16px;"><label class="form-label">Package name <span class="req"></span></label><input type="text" class="form-input" placeholder="Enter package name"></div>
                 <div style="margin-bottom:16px;"><label class="form-label">Description</label><textarea class="form-textarea" rows="3" placeholder="Enter package description"></textarea></div>
                 <div style="margin-bottom:16px;"><label class="form-label">Short description</label><textarea class="form-textarea" rows="2" placeholder="Enter short description"></textarea></div>
                 <div><label class="form-label">Package Price</label><input type="text" class="form-input" placeholder="0.00" style="max-width:170px;"></div>
             </div>
-            <div class="card" style="padding:22px;margin-bottom:14px;">
+            <div class="card" style="padding:24px;margin-bottom:14px;">
                 <div class="sec-title">Courses</div>
                 <label class="form-label">Add course to this package</label>
                 <select class="form-select"><option value="">Select a course...</option><option>12-6-2019 TREC Test Course (ver.2)</option><option>2018-19 CE Legal Update Part I (ver.1)</option><option>2018-19 CE Legal Update Part II (ver.1)</option><option>Texas Real Estate Principles (ver.1)</option><option>Real Estate Finance (ver.2)</option></select>
             </div>
-            <div class="card" style="padding:22px;margin-bottom:14px;">
+            <div class="card" style="padding:24px;margin-bottom:14px;">
                 <div class="sec-title">Options</div>
-                <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;flex-direction:column;gap:12px;">
                     <label class="form-check"><input type="checkbox"> Student must take the courses in the package order</label>
                     <label class="form-check"><input type="checkbox" checked> Package is active</label>
                 </div>
             </div>
-            <div style="display:flex;gap:7px;"><button class="btn btn-primary" onclick="go('packages')"><i class="fa-solid fa-check"></i> Save</button><button class="btn btn-outline" onclick="go('packages')">Cancel</button></div>
+            <div style="display:flex;gap:8px;"><button class="btn btn-primary" onclick="go('packages')"><i class="fa-solid fa-check"></i> Save</button><button class="btn btn-outline" onclick="go('packages')">Cancel</button></div>
         </div>
 
         <!-- PAGE: Glossary -->
@@ -426,6 +681,7 @@
                 <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> Manage Categories</div>
                 <div class="ph-title">Manage Categories</div>
             </div>
+            <div class="toolbar"><button class="btn btn-primary" onclick="addCatRow()"><i class="fa-solid fa-plus"></i> Add new category</button></div>
             <div class="card">
                 <table class="data-table" id="cat-table">
                     <thead><tr><th>Name</th><th>Description</th><th style="width:120px;" class="th-actions">Actions</th></tr></thead>
@@ -433,36 +689,48 @@
                         <tr><td class="cn">Washington Pre-license</td><td class="cd">Pre-licensing courses for Washington state real estate agents</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
                         <tr><td class="cn">Managing Broker</td><td class="cd">Courses required for managing broker designation and responsibilities</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
                         <tr><td class="cn">Texas CE</td><td class="cd">Continuing education courses for Texas real estate license renewal</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
-                        <tr><td class="cn">Texas SAE</td><td class="cd">Sales agent apprenticeship education courses for new Texas agents</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
-                        <tr><td class="cn">National Courses</td><td class="cd">General real estate courses applicable across multiple states</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
+                        <tr><td class="cn">Texas SAE</td><td class="cd">Supplemental education courses for Texas real estate agents</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
                     </tbody>
                 </table>
+                <div class="pager"><span>1 - 4 of 4 items</span><div class="pager-btns"><button class="on">1</button></div></div>
             </div>
         </div>
 
         <!-- PAGE: Publish -->
         <div class="page" id="page-publish">
             <div class="page-heading">
-                <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> Publish - Courses</div>
-                <div class="ph-title">Publish - Courses</div>
+                <div class="ph-breadcrumb">Courses <i class="fa-solid fa-chevron-right"></i> Publish Courses</div>
+                <div class="ph-title">Publish Courses</div>
             </div>
             <div class="card">
-                <table class="data-table">
-                    <thead><tr><th style="width:110px;">Status</th><th>Course Name</th></tr></thead>
-                    <tbody>
-                        <tr><td><span class="dot on"></span> Published</td><td style="font-weight:600;">12-6-2019 TREC Test Course ver.2</td></tr>
-                        <tr><td><span class="dot on"></span> Published</td><td style="font-weight:600;">12-6-2019 TREC Test Course ver.3</td></tr>
-                        <tr><td><span class="dot on"></span> Published</td><td style="font-weight:600;">2018-19 CE Legal Update Part I ver.1</td></tr>
-                        <tr><td><span class="dot off"></span> Unpublished</td><td style="font-weight:600;">2018-19 CE Legal Update Part II ver.1</td></tr>
-                        <tr><td><span class="dot on"></span> Published</td><td style="font-weight:600;">Texas Real Estate Principles ver.1</td></tr>
-                        <tr><td><span class="dot on"></span> Published</td><td style="font-weight:600;">Real Estate Finance ver.2</td></tr>
-                        <tr><td><span class="dot off"></span> Unpublished</td><td style="font-weight:600;">Property Management Essentials ver.1</td></tr>
-                        <tr><td><span class="dot on"></span> Published</td><td style="font-weight:600;">Contract Law for Agents ver.1</td></tr>
-                        <tr><td><span class="dot on"></span> Published</td><td style="font-weight:600;">Agency Law Fundamentals ver.1</td></tr>
-                        <tr><td><span class="dot off"></span> Unpublished</td><td style="font-weight:600;">Real Estate Investment Analysis ver.1</td></tr>
-                    </tbody>
-                </table>
-                <div class="pager"><span>1 - 10 of 75 items</span><div class="pager-btns"><button class="on">1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>...</button><button>8</button></div></div>
+                <table class="data-table"><thead><tr><th>Course Title</th><th>Version</th><th>Schools</th><th>Status</th><th style="width:120px;" class="th-actions">Actions</th></tr></thead><tbody><tr><td colspan="5"><div class="empty"><i class="fa-solid fa-cloud-arrow-up" style="display:block;"></i><p>No courses pending publish</p></div></td></tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- PAGE: Users -->
+        <div class="page" id="page-users">
+            <div class="page-heading">
+                <div class="ph-breadcrumb">Main <i class="fa-solid fa-chevron-right"></i> Users</div>
+                <div class="ph-title">Users</div>
+            </div>
+            <div class="toolbar-2">
+                <div class="search-wrap"><i class="fa-solid fa-search"></i><input type="text" class="form-input" placeholder="Search users..." style="width:230px;"></div>
+                <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add new user</button>
+            </div>
+            <div class="card">
+                <table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th style="width:120px;" class="th-actions">Actions</th></tr></thead><tbody><tr><td colspan="5"><div class="empty"><i class="fa-solid fa-users"></i><p style="font-weight:600;color:var(--text-secondary);margin-bottom:12px;">No users yet</p><button class="btn btn-primary btn-sm" style="margin:0 auto;"><i class="fa-solid fa-plus"></i> Add your first user</button></div></td></tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- PAGE: Schools -->
+        <div class="page" id="page-schools">
+            <div class="page-heading">
+                <div class="ph-breadcrumb">Main <i class="fa-solid fa-chevron-right"></i> Schools</div>
+                <div class="ph-title">Schools</div>
+            </div>
+            <div class="toolbar"><button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add new school</button></div>
+            <div class="card">
+                <table class="data-table"><thead><tr><th>School Name</th><th>Location</th><th>Courses</th><th>Status</th><th style="width:120px;" class="th-actions">Actions</th></tr></thead><tbody><tr><td colspan="5"><div class="empty"><i class="fa-solid fa-school"></i><p style="font-weight:600;color:var(--text-secondary);margin-bottom:12px;">No schools yet</p><button class="btn btn-primary btn-sm" style="margin:0 auto;"><i class="fa-solid fa-plus"></i> Add your first school</button></div></td></tr></tbody></table>
             </div>
         </div>
 
@@ -472,147 +740,252 @@
                 <div class="ph-breadcrumb">Analytics <i class="fa-solid fa-chevron-right"></i> Reports</div>
                 <div class="ph-title">Reports</div>
             </div>
-            <div class="toolbar">
-                <div class="students-dropdown" id="students-dd">
-                    <button class="students-dropdown-btn" onclick="toggleStudentsDd()"><span>Students</span><i class="fa-solid fa-chevron-down chevron"></i></button>
-                    <div class="students-dropdown-list" id="students-dd-list"><button onclick="selectStudentOption(this)">Student Registrations</button><button onclick="selectStudentOption(this)">Affiliates</button></div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;">
+                <div class="metric-card mc-indigo">
+                    <div class="mc-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div class="mc-label">Total Courses</div>
+                    <div class="mc-value">8</div>
+                </div>
+                <div class="metric-card mc-emerald">
+                    <div class="mc-icon"><i class="fa-solid fa-user-graduate"></i></div>
+                    <div class="mc-label">Active Students</div>
+                    <div class="mc-value">0</div>
+                </div>
+                <div class="metric-card mc-amber">
+                    <div class="mc-icon"><i class="fa-solid fa-school"></i></div>
+                    <div class="mc-label">Partner Schools</div>
+                    <div class="mc-value">3</div>
+                </div>
+                <div class="metric-card mc-rose">
+                    <div class="mc-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+                    <div class="mc-label">Revenue this month</div>
+                    <div class="mc-value">$0.00</div>
                 </div>
             </div>
-            <div style="display:grid;grid-template-columns:260px 1fr;gap:14px;">
-                <div style="display:flex;flex-direction:column;gap:14px;">
-                    <div class="metric-card mc-blue"><div class="mc-label">Total sales this month</div><div class="mc-value">$0.00</div></div>
-                    <div class="metric-card mc-teal"><div class="mc-label">Total students</div><div class="mc-value">26,901</div></div>
-                </div>
-                <div class="card" style="overflow:hidden;">
-                    <div style="padding:10px 14px;background:#fafbfc;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);">Financial Summary by School</div>
-                    <table class="fin-table"><thead><tr><th>School</th><th style="text-align:right;">Amount</th></tr></thead><tbody><tr><td>Train Agents</td><td class="fin-amount">$9,158.88</td></tr><tr><td>A Plus Estate School</td><td class="fin-amount">$0,902.34</td></tr><tr><td>Webnet Real Estate School</td><td class="fin-amount">$3,421.50</td></tr><tr><td>Lexington Publishing</td><td class="fin-amount">$1,876.22</td></tr><tr><td>Texas Real Estate Academy</td><td class="fin-amount">$652.10</td></tr><tr><td>Premier School of Real Estate</td><td class="fin-amount">$445.00</td></tr><tr><td>Capital Real Estate Training</td><td class="fin-amount">$312.75</td></tr></tbody></table>
-                    <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:12.5px;"><span style="font-weight:600;">Total</span><span style="font-weight:700;color:var(--accent);">$16,768.79</span></div>
-                </div>
+
+            <div class="report-section-title">Course performance</div>
+            <div class="card">
+                <table class="fin-table"><thead><tr><th>Course</th><th>Enrollments</th><th>Completions</th><th class="fin-amount">Revenue</th></tr></thead><tbody><tr><td colspan="4">
+                    <div class="empty">
+                        <i class="fa-solid fa-chart-bar" style="display:block;"></i>
+                        <p style="font-weight:600;color:var(--text-secondary);margin-bottom:4px;">No report data yet</p>
+                        <p>Data will appear here once students start enrolling in your courses.</p>
+                    </div>
+                </td></tr></tbody></table>
             </div>
         </div>
 
     </div>
 </div>
 
+<!-- Toast container -->
+<div id="toast-container" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;"></div>
+
 <script>
-    var titles = {
-    'list-courses':['Courses','List of Courses'],
-    'courses':['Courses','List of Courses'],
-    'add-course':['Courses','Add Course'],
-    'edit-course':['Courses','Edit Course'],
-    'packages':['Courses','Packages'],
-    'add-package':['Courses','Add New Package'],
-    'glossary':['Courses','Glossary List'],
-    'categories':['Courses','Manage Categories'],
-    'publish':['Courses','Publish - Courses'],
-    'reports':['Analytics','Reports'],
-    'users':['Main','Users'],
-    'schools':['Main','Schools']
-};
+/* ===== Page navigation ===== */
+function go(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('page-' + page);
+    if (target) target.classList.add('active');
 
-var subPages = ['list-courses', 'packages', 'glossary', 'categories', 'publish'];
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const map = { courses:'courses', 'add-course':'courses', 'edit-course':'courses', import:'import', packages:'packages', 'add-package':'packages', glossary:'glossary', categories:'categories', publish:'publish', users:'users', schools:'schools', reports:'reports' };
+    const section = map[page] || page;
+    document.querySelectorAll('.nav-item').forEach(n => {
+        if (n.dataset.page === section || n.dataset.sub === section) n.classList.add('active');
+    });
 
-function go(id) {
-    // 1. Resolve target IDs: Clicking parent "courses" loads "list-courses"
-    var targetId = (id === 'courses') ? 'list-courses' : id;
-    var pageId = (targetId === 'list-courses') ? 'courses' : targetId;
+    // Show/hide course sub-nav items
+    const courseSubs = document.querySelectorAll('.nav-sub');
+    const inCourses = ['courses','add-course','edit-course','import','packages','add-package','glossary','categories','publish'].includes(page);
+    courseSubs.forEach(s => {
+        if (inCourses) s.classList.remove('hidden-sub');
+        else s.classList.add('hidden-sub');
+    });
 
-    // 2. Manage Page Visibility
-    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
-    var t = document.getElementById('page-' + pageId);
-    if(t) t.classList.add('active');
-
-    // 3. Manage Breadcrumbs
-    var bc = document.getElementById('breadcrumb'), info = titles[targetId] || ['', targetId];
-    if(bc){
-        bc.innerHTML='<span>'+info[0]+'</span> <i class="fa-solid fa-chevron-right"></i> <span class="current">'+info[1]+'</span>';
-    }
-
-    // 4. Sidebar Visibility Logic
-    var sidebar = document.getElementById('sidebar');
-    var mainEl = document.getElementById('main');
-    if(targetId === 'edit-course') {
-        sidebar.classList.add('hidden-sidebar');
+    // Auto-collapse the sidebar while editing a course to give the editor more room
+    const sidebarEl = document.getElementById('sidebar');
+    const mainEl = document.getElementById('main');
+    if (page === 'edit-course') {
+        sidebarEl.classList.add('hidden-sidebar');
         mainEl.classList.add('full-width');
+        sidebarEl.classList.remove('mobile-open');
     } else {
-        sidebar.classList.remove('hidden-sidebar');
+        sidebarEl.classList.remove('hidden-sidebar');
         mainEl.classList.remove('full-width');
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-    // 5. Sidebar Highlight Logic
-    document.querySelectorAll('.nav-item').forEach(function(n){
-        n.classList.remove('active');
-    });
-
-    // Highlight the selected item
-    var activeEl = document.querySelector('.nav-item[data-page="'+targetId+'"]');
-    if(activeEl) activeEl.classList.add('active');
-
-    // Keep parent "Courses" active when sub-item is selected
-    if (subPages.includes(targetId)) {
-        var parentEl = document.querySelector('.nav-item[data-page="courses"]');
-        if(parentEl) parentEl.classList.add('active');
+/* ===== Manual sidebar toggle (e.g. from the Edit Course screen) ===== */
+function toggleSidebar() {
+    const sidebarEl = document.getElementById('sidebar');
+    const mainEl = document.getElementById('main');
+    if (window.innerWidth <= 900) {
+        sidebarEl.classList.toggle('mobile-open');
+    } else {
+        sidebarEl.classList.toggle('hidden-sidebar');
+        mainEl.classList.toggle('full-width');
     }
 }
 
-// Navigation Listener
-document.querySelectorAll('.nav-item').forEach(function(n){
-    n.addEventListener('click',function(e){
+/* ===== Sidebar nav clicks ===== */
+document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function(e) {
         e.preventDefault();
-        var p = this.getAttribute('data-page');
-        if(p) go(p);
+        const page = this.dataset.page || this.dataset.sub;
+        if (page) go(page);
+        if (window.innerWidth <= 900) closeMobileSidebar();
     });
 });
 
-/* --- Utility Functions --- */
-function rte(cmd){document.execCommand(cmd,false,null);}
-
-function toggleDrop(btn){var m=btn.nextElementSibling,o=m.classList.contains('show');closeAllDrops();if(!o)m.classList.add('show');}
-function closeAllDrops(){document.querySelectorAll('.dropdown-menu.show').forEach(function(m){m.classList.remove('show');});}
-document.addEventListener('click',function(e){if(!e.target.closest('.mod-drop'))closeAllDrops();});
-
-function modAction(action){
-    closeAllDrops();
-    var a=document.querySelector('.mod-item.on');if(!a)return;
-    var list=document.getElementById('mod-list'),items=Array.from(list.querySelectorAll('.mod-item')),idx=items.indexOf(a);
-    if(action==='up'&&idx>0){list.insertBefore(a,items[idx-1]);renumber();}
-    else if(action==='down'&&idx<items.length-1){list.insertBefore(items[idx+1],a);renumber();}
-    else if(action==='delete'){if(items.length>1){a.remove();renumber();var r=list.querySelectorAll('.mod-item');if(r.length)r[0].classList.add('on');}}
-    else if(action==='duplicate'){var c=a.cloneNode(true);c.classList.remove('on');c.setAttribute('draggable','true');bindDrag(c);if(idx<items.length-1)list.insertBefore(c,items[idx+1]);else list.appendChild(c);renumber();}
+function closeMobileSidebar() {
+    document.getElementById('sidebar').classList.remove('mobile-open');
 }
-function renumber(){document.querySelectorAll('#mod-list .mod-item').forEach(function(m,i){m.querySelector('.mod-num').textContent=i+1;});}
 
-document.querySelectorAll('#mod-list .mod-item').forEach(function(item){
-    item.addEventListener('click',function(e){if(e.target.closest('.mod-drop')||e.target.closest('.mod-grip'))return;document.querySelectorAll('#mod-list .mod-item').forEach(function(m){m.classList.remove('on');});this.classList.add('on');});
+/* ===== Profile dropdown ===== */
+function toggleProfile() {
+    const trigger = document.getElementById('profile-trigger');
+    const dropdown = document.getElementById('profile-dropdown');
+    trigger.classList.toggle('open');
+    dropdown.classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('#profile-trigger') && !e.target.closest('#profile-dropdown')) {
+        document.getElementById('profile-trigger').classList.remove('open');
+        document.getElementById('profile-dropdown').classList.remove('show');
+    }
 });
 
-/* Drag and Drop */
-var dragSrc=null;
-function bindDrag(el){el.addEventListener('dragstart',handleDragStart);el.addEventListener('dragend',handleDragEnd);el.addEventListener('dragover',handleDragOver);el.addEventListener('dragenter',handleDragEnter);el.addEventListener('dragleave',handleDragLeave);el.addEventListener('drop',handleDrop);}
-function handleDragStart(e){dragSrc=this;this.classList.add('dragging');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain','');}
-function handleDragEnd(){this.classList.remove('dragging');document.querySelectorAll('#mod-list .mod-item').forEach(function(m){m.classList.remove('drag-over');});}
-function handleDragOver(e){e.preventDefault();e.dataTransfer.dropEffect='move';}
-function handleDragEnter(e){e.preventDefault();if(this!==dragSrc)this.classList.add('drag-over');}
-function handleDragLeave(){this.classList.remove('drag-over');}
-function handleDrop(e){e.preventDefault();this.classList.remove('drag-over');if(dragSrc!==this){var list=document.getElementById('mod-list'),items=Array.from(list.querySelectorAll('.mod-item')),fi=items.indexOf(dragSrc),ti=items.indexOf(this);if(fi<ti)list.insertBefore(dragSrc,this.nextSibling);else list.insertBefore(dragSrc,this);renumber();}}
-document.querySelectorAll('#mod-list .mod-item').forEach(bindDrag);
+/* ===== Rich text editor ===== */
+function rte(cmd, val) { document.execCommand(cmd, false, val || null); }
 
-/* Profile and Student Dropdowns */
-function toggleStudentsDd(){document.getElementById('students-dd-list').classList.toggle('show');document.querySelector('#students-dd .students-dropdown-btn').classList.toggle('open');}
-function selectStudentOption(btn){document.querySelector('#students-dd .students-dropdown-btn span').textContent=btn.textContent;document.getElementById('students-dd-list').classList.remove('show');document.querySelector('#students-dd .students-dropdown-btn').classList.remove('open');}
-function toggleProfile(){document.getElementById('profile-dropdown').classList.toggle('show');document.getElementById('profile-trigger').classList.toggle('open');}
-document.addEventListener('click',function(e){
-    if(!e.target.closest('#profile-trigger')&&!e.target.closest('#profile-dropdown')){document.getElementById('profile-dropdown').classList.remove('show');document.getElementById('profile-trigger').classList.remove('open');}
-    if(!e.target.closest('#students-dd')){document.getElementById('students-dd-list').classList.remove('show');document.querySelector('#students-dd .students-dropdown-btn').classList.remove('open');}
+/* ===== Module dropdown menu ===== */
+function toggleDrop(btn) {
+    const menu = btn.nextElementSibling;
+    const wasOpen = menu.classList.contains('show');
+    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+    if (!wasOpen) menu.classList.add('show');
+}
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.mod-drop')) {
+        document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+    }
 });
 
-/* Category Edit Functions */
-function editCat(btn){var r=btn.closest('tr'),n=r.querySelector('.cn'),d=r.querySelector('.cd'),a=btn.closest('td'),nv=n.textContent,dv=d.textContent;n.innerHTML='<input type="text" class="inline-input" value="'+nv.replace(/"/g,'&quot;')+'">';d.innerHTML='<input type="text" class="inline-input" value="'+dv.replace(/"/g,'&quot;')+'">';a.innerHTML='<div style="display:flex;gap:4px;"><button class="btn btn-primary btn-sm" onclick="saveCat(this)"><i class="fa-solid fa-check" style="font-size:9px;"></i> Save</button><button class="btn btn-outline btn-sm" onclick="cancelCat(this,\''+nv.replace(/'/g,"\\'")+'\',\''+dv.replace(/'/g,"\\'")+'\')"><i class="fa-solid fa-xmark" style="font-size:9px;"></i> Cancel</button></div>';}
-function saveCat(btn){var r=btn.closest('tr'),ni=r.querySelector('.cn input'),di=r.querySelector('.cd input'),a=btn.closest('td');r.querySelector('.cn').textContent=ni.value.trim();r.querySelector('.cd').textContent=di.value.trim();a.innerHTML='<div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div>';}
-function cancelCat(btn,on,od){var r=btn.closest('tr'),a=btn.closest('td');r.querySelector('.cn').textContent=on;r.querySelector('.cd').textContent=od;a.innerHTML='<div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div>';}
+/* ===== Module actions ===== */
+function modAction(action) {
+    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+    const msgs = { edit:'Opening module editor...', duplicate:'Module duplicated', up:'Module moved up', down:'Module moved down', delete:'Module deleted' };
+    if (msgs[action]) showToast(msgs[action]);
+}
 
-/* Init */
-go('list-courses');
+/* ===== Drag and drop for modules ===== */
+const modList = document.getElementById('mod-list');
+if (modList) {
+    let dragItem = null;
+    modList.addEventListener('dragstart', function(e) {
+        dragItem = e.target.closest('.mod-item');
+        if (dragItem) { dragItem.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; }
+    });
+    modList.addEventListener('dragend', function() {
+        if (dragItem) dragItem.classList.remove('dragging');
+        modList.querySelectorAll('.mod-item').forEach(i => i.classList.remove('drag-over'));
+        dragItem = null;
+        // Re-number
+        modList.querySelectorAll('.mod-item').forEach((item, idx) => {
+            item.querySelector('.mod-num').textContent = idx + 1;
+        });
+    });
+    modList.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        const target = e.target.closest('.mod-item');
+        if (target && target !== dragItem) {
+            modList.querySelectorAll('.mod-item').forEach(i => i.classList.remove('drag-over'));
+            target.classList.add('drag-over');
+        }
+    });
+    modList.addEventListener('drop', function(e) {
+        e.preventDefault();
+        const target = e.target.closest('.mod-item');
+        if (target && target !== dragItem && dragItem) {
+            const items = [...modList.querySelectorAll('.mod-item')];
+            const fromIdx = items.indexOf(dragItem);
+            const toIdx = items.indexOf(target);
+            if (fromIdx < toIdx) target.after(dragItem);
+            else target.before(dragItem);
+        }
+    });
+    // Click to select
+    modList.addEventListener('click', function(e) {
+        if (!e.target.closest('.mod-drop-btn') && !e.target.closest('.dropdown-menu')) {
+            modList.querySelectorAll('.mod-item').forEach(i => i.classList.remove('on'));
+            const item = e.target.closest('.mod-item');
+            if (item) item.classList.add('on');
+        }
+    });
+}
+
+/* ===== Edit page tabs ===== */
+function switchEditTab(tab, btn) {
+    // Update tab buttons
+    document.querySelectorAll('.edit-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    // Update tab content
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+}
+
+/* ===== Categories inline edit ===== */
+function editCat(btn) {
+    const row = btn.closest('tr');
+    const nameCell = row.querySelector('.cn');
+    const descCell = row.querySelector('.cd');
+    const currentName = nameCell.textContent;
+    const currentDesc = descCell.textContent;
+    nameCell.innerHTML = '<input class="inline-input" value="' + currentName.replace(/"/g, '&quot;') + '">';
+    descCell.innerHTML = '<input class="inline-input" value="' + currentDesc.replace(/"/g, '&quot;') + '">';
+    btn.innerHTML = '<i class="fa-solid fa-check" style="font-size:9px;"></i> Save';
+    btn.onclick = function() {
+        nameCell.textContent = nameCell.querySelector('input').value || currentName;
+        descCell.textContent = descCell.querySelector('input').value || currentDesc;
+        btn.innerHTML = '<i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit';
+        btn.onclick = function() { editCat(btn); };
+        showToast('Category updated');
+    };
+}
+function addCatRow() {
+    const tbody = document.querySelector('#cat-table tbody');
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td class="cn"><input class="inline-input" placeholder="Category name"></td><td class="cd"><input class="inline-input" placeholder="Description"></td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td>';
+    tbody.appendChild(tr);
+    tr.querySelector('.cn input').focus();
+    showToast('New category row added');
+}
+
+/* ===== Header icon tabs ===== */
+document.querySelectorAll('.header-icon').forEach(icon => {
+    if (icon.id === 'mobile-menu-btn') return;
+    icon.addEventListener('click', function() {
+        document.querySelectorAll('.header-icon').forEach(i => { if (i.id !== 'mobile-menu-btn') i.classList.remove('active-tab'); });
+        this.classList.add('active-tab');
+    });
+});
+
+/* ===== Toast notification ===== */
+function showToast(msg) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.style.cssText = 'background:#1a1d2e;color:#fff;padding:10px 18px;border-radius:8px;font-size:12.5px;font-family:DM Sans,sans-serif;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.18);pointer-events:auto;opacity:0;transform:translateY(10px);transition:all .25s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:8px;';
+    toast.innerHTML = '<i class="fa-solid fa-circle-check" style="color:#4078E5;font-size:13px;"></i>' + msg;
+    container.appendChild(toast);
+    requestAnimationFrame(() => { toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; });
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 260);
+    }, 2400);
+}
 </script>
 </body>
 </html>
