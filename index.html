@@ -126,7 +126,7 @@
         .act-divider{width:1px;align-self:stretch;background:var(--border);margin:0 3px;flex-shrink:0;}
         .act-btn-danger{border-color:rgba(239,68,68,.22);color:var(--danger);}
         .act-btn-danger:hover{border-color:var(--danger);box-shadow:0 4px 10px -2px rgba(239,68,68,.22);}
-        .btn-icon{padding:6px 8px;background:transparent;border:none;color:var(--text-muted);cursor:pointer;border-radius:6px;transition:all .15s;font-size:11px;}
+        .btn-icon{padding:6px 8px;background:transparent;border:none;color:var(--accent);cursor:pointer;border-radius:6px;transition:all .15s;font-size:11px;}
         .btn-icon:hover{background:var(--border-light);color:var(--text-primary);box-shadow:0 1px 2px rgba(0,0,0,.04);}
 
         .form-label{display:block;font-size:12px;font-weight:600;color:var(--text-primary);margin-bottom:5px;}
@@ -281,6 +281,9 @@
         }
         .action-btns{
             display: flex;
+        }
+        .action-btn{
+ padding: 8px;
         }
     </style>
 </head>
@@ -670,7 +673,7 @@
             </div>
             <div class="toolbar"><button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add new record</button></div>
             <div class="card">
-                <table class="data-table"><thead><tr><th>Glossary</th><th>Description</th><th>Active</th><th style="width:150px;" class="th-actions">Actions</th></tr></thead><tbody><tr><td style="font-weight:600;">Magic Glossary</td><td>Glossary Description</td><td><span style="color:var(--success);font-weight:600;font-size:12px;">true</span></td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit glossary</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr></tbody></table>
+                <table class="data-table"><thead><tr><th>Glossary</th><th>Description</th><th>Active</th><th style="width:150px;" class="th-actions">Actions</th></tr></thead><tbody><tr><td style="font-weight:600;">Magic Glossary</td><td>Glossary Description</td><td><span style="color:var(--success);font-weight:600;font-size:12px;">true</span></td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm  action-btn"><i class="fa-solid fa-pen" style="font-size:9px;"></i></button><button class="btn btn-ghost-danger btn-sm action-btn"><i class="fa-solid fa-trash" style="font-size:9px;"></i></button></div></td></tr></tbody></table>
                 <div class="pager"><span>1 - 1 of 1 items</span><div class="pager-btns"><button class="on">1</button></div></div>
             </div>
         </div>
@@ -686,10 +689,10 @@
                 <table class="data-table" id="cat-table">
                     <thead><tr><th>Name</th><th>Description</th><th style="width:120px;" class="th-actions">Actions</th></tr></thead>
                     <tbody>
-                        <tr><td class="cn">Washington Pre-license</td><td class="cd">Pre-licensing courses for Washington state real estate agents</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
-                        <tr><td class="cn">Managing Broker</td><td class="cd">Courses required for managing broker designation and responsibilities</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
-                        <tr><td class="cn">Texas CE</td><td class="cd">Continuing education courses for Texas real estate license renewal</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
-                        <tr><td class="cn">Texas SAE</td><td class="cd">Supplemental education courses for Texas real estate agents</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i> Edit</button><button class="btn btn-ghost-danger btn-sm"><i class="fa-solid fa-trash" style="font-size:9px;"></i> Delete</button></div></td></tr>
+                        <tr><td class="cn">Washington Pre-license</td><td class="cd">Pre-licensing courses for Washington state real estate agents</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm action-btn" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i></button><button class="btn btn-ghost-danger btn-sm action-btn"><i class="fa-solid fa-trash" style="font-size:9px;"></i></button></div></td></tr>
+                        <tr><td class="cn">Managing Broker</td><td class="cd">Courses required for managing broker designation and responsibilities</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm action-btn" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i></button><button class="btn btn-ghost-danger btn-sm action-btn"><i class="fa-solid fa-trash" style="font-size:9px;"></i></button></div></td></tr>
+                        <tr><td class="cn">Texas CE</td><td class="cd">Continuing education courses for Texas real estate license renewal</td><td class="td-actions"><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm action-btn" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i></button><button class="btn btn-ghost-danger btn-sm action-btn"><i class="fa-solid fa-trash" style="font-size:9px;"></i></button></div></td></tr>
+                        <tr><td class="cn">Texas SAE</td><td class="cd">Supplemental education courses for Texas real estate agents</td><td class="td-actions "><div style="display:flex;gap:4px;justify-content:flex-end;"><button class="btn btn-outline btn-sm action-btn" onclick="editCat(this)"><i class="fa-solid fa-pen" style="font-size:9px;"></i></button><button class="btn btn-ghost-danger btn-sm action-btn"><i class="fa-solid fa-trash" style="font-size:9px;"></i></button></div></td></tr>
                     </tbody>
                 </table>
                 <div class="pager"><span>1 - 4 of 4 items</span><div class="pager-btns"><button class="on">1</button></div></div>
